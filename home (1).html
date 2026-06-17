@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <title>Mediquick Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#ffd9e0",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#00a92a",
+                        "outline-variant": "#e1bec5",
+                        "inverse-primary": "#ffb1c4",
+                        "on-background": "#26181b",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#8d7076",
+                        "background": "#fff8f8",
+                        "on-secondary-fixed-variant": "#474747",
+                        "surface-dim": "#eed4d8",
+                        "on-tertiary-container": "#003306",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "secondary-fixed": "#e4e2e1",
+                        "surface-variant": "#f7dce1",
+                        "secondary": "#5f5e5e",
+                        "on-primary-fixed-variant": "#8f0043",
+                        "surface-container": "#ffe8ec",
+                        "inverse-surface": "#3c2c30",
+                        "tertiary-fixed": "#75ff75",
+                        "surface-tint": "#b90a5a",
+                        "on-primary-container": "#5b0028",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-highest": "#f7dce1",
+                        "on-surface-variant": "#594046",
+                        "inverse-on-surface": "#ffecef",
+                        "surface-bright": "#fff8f8",
+                        "primary-fixed-dim": "#ffb1c4",
+                        "on-tertiary-fixed-variant": "#00530f",
+                        "tertiary-fixed-dim": "#57e15b",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "error-container": "#ffdad6",
+                        "on-error": "#ffffff",
+                        "tertiary": "#006e18",
+                        "secondary-container": "#e4e2e1",
+                        "on-tertiary-fixed": "#002203",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-container-high": "#fde2e6",
+                        "primary": "#b90a5a",
+                        "on-primary-fixed": "#3f001a",
+                        "surface-container-low": "#fff0f2",
+                        "primary-container": "#ff4d8d",
+                        "on-surface": "#26181b",
+                        "on-secondary": "#ffffff",
+                        "surface": "#fff8f8",
+                        "on-secondary-container": "#656464"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xs": "4px",
+                        "xl": "32px",
+                        "base": "4px",
+                        "md": "16px",
+                        "lg": "24px",
+                        "container-padding": "20px",
+                        "2xl": "48px",
+                        "sm": "8px",
+                        "gutter": "12px"
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            background-color: #f5f7fa;
+            min-height: max(884px, 100dvh);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .primary-gradient {
+            background: linear-gradient(135deg, #b90a5a 0%, #ff4d8d 100%);
+        }
+
+        .emergency-glow {
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0% {
+                box-shadow: 0 0 0 0 rgba(185, 10, 90, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 20px rgba(185, 10, 90, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(185, 10, 90, 0);
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(100%);
+            }
+        }
+
+        .animate-slide-up {
+            animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .animate-slide-down {
+            animation: slideDown 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stagger-1 {
+            animation-delay: 0.1s;
+        }
+
+        .stagger-2 {
+            animation-delay: 0.2s;
+        }
+
+        .stagger-3 {
+            animation-delay: 0.3s;
+        }
+    </style>
+</head>
+
+<body class="text-on-surface pb-24">
+
+    <div id="skeletonScreen" class="w-full fixed inset-0 z-50 bg-[#f5f7fa] overflow-y-auto pb-24 animate-pulse">
+        <header class="flex justify-between items-center px-container-padding py-sm w-full bg-white shadow-sm">
+            <div class="flex flex-col space-y-2">
+                <div class="h-6 w-32 bg-gray-200 rounded-lg"></div>
+                <div class="h-4 w-44 bg-gray-200 rounded-md"></div>
+            </div>
+            <div class="flex items-center gap-md">
+                <div class="w-6 h-6 bg-gray-200 rounded-full"></div>
+                <div class="w-10 h-10 rounded-full bg-gray-200"></div>
+            </div>
+        </header>
+
+        <div class="px-container-padding pt-md space-y-xl max-w-md mx-auto w-full">
+            <div class="w-full h-36 bg-gray-200 rounded-xl"></div>
+
+            <div class="grid grid-cols-2 gap-md">
+                <div class="h-24 bg-gray-200 rounded-xl"></div>
+                <div class="h-24 bg-gray-200 rounded-xl"></div>
+            </div>
+
+            <div class="h-5 w-32 bg-gray-200 rounded px-xs"></div>
+
+            <div class="grid grid-cols-2 gap-md">
+                <div class="h-28 bg-gray-200 rounded-xl"></div>
+                <div class="h-28 bg-gray-200 rounded-xl"></div>
+                <div class="h-28 bg-gray-200 rounded-xl"></div>
+                <div class="h-28 bg-gray-200 rounded-xl"></div>
+            </div>
+        </div>
+
+        <nav
+            class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-3 flex justify-around items-center">
+            <div class="w-12 h-8 bg-gray-200 rounded"></div>
+            <div class="w-12 h-8 bg-gray-200 rounded"></div>
+            <div class="w-12 h-8 bg-gray-200 rounded"></div>
+            <div class="w-12 h-8 bg-gray-200 rounded"></div>
+        </nav>
+    </div>
+
+    <div id="realInterface" class="hidden opacity-0 transition-opacity duration-500">
+
+        <header
+            class="flex justify-between items-center px-container-padding py-sm w-full sticky top-0 z-10 bg-surface shadow-sm">
+            <div class="flex flex-col">
+                <h1 class="text-headline-lg font-bold text-primary">Hola, Paciente</h1>
+                <p class="text-sm text-on-surface-variant">Bienvenido a Mediquick</p>
+            </div>
+            <div class="flex items-center gap-md">
+                <button id="btnNotifications"
+                    class="material-symbols-outlined text-primary hover:opacity-80 transition-opacity">notifications</button>
+                <div
+                    class="w-10 h-10 rounded-full bg-surface-container overflow-hidden border-2 border-primary-container cursor-pointer">
+                    <img alt="User Profile" class="w-full h-full object-cover"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC5NRmOcEZb9_zNx-zcTc6q8frHqpahPaPkmR-jiBqSdPPSkZcWPXjrMGwFBpOKj2Gb4zBYPLq3Vo66C-BS39OF6CAHR_t1_Vpy3LxacKMRr5ZAt-3PrmLrzgjowZ8FrS08bkuJAK1qi6QpWob0E6E8Sebmj727yE1F26mZbEMUsVn6bdzaj2qHL63knkXEHQAb2uIQYy-_Q53RzqXRZiZUhsR-_lDNRrKxF0UsFKsD9SJRRdmnUccwEZ3B_u1kLwpyYugPRrPyvhg" />
+                </div>
+            </div>
+        </header>
+
+        <main class="px-container-padding pb-32 pt-md space-y-xl max-w-md mx-auto">
+            <section class="fade-in stagger-1">
+                <div class="primary-gradient rounded-xl p-lg text-on-primary shadow-lg relative overflow-hidden">
+                    <div
+                        class="absolute top-0 right-0 opacity-10 pointer-events-none transform translate-x-1/4 -translate-y-1/4">
+                        <span class="material-symbols-outlined text-[120px]"
+                            style="font-variation-settings: 'FILL' 1;">medical_services</span>
+                    </div>
+                    <div class="relative z-10 space-y-md">
+                        <h2 class="text-xl font-bold">Tu salud primero ✨</h2>
+                        <div class="flex flex-col space-y-xs">
+                            <p class="text-xs uppercase opacity-80 tracking-wider">Próxima Cita</p>
+                            <div class="flex items-center gap-sm">
+                                <span class="material-symbols-outlined">calendar_today</span>
+                                <p class="text-lg font-bold">Mañana, 10:30 AM</p>
+                            </div>
+                            <p class="text-sm">Cardiología • Dr. Alberto Ruiz</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="grid grid-cols-2 gap-md fade-in stagger-2">
+                <div class="glass-card p-md rounded-xl shadow-sm flex flex-col items-center text-center space-y-sm">
+                    <div
+                        class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+                        <span class="material-symbols-outlined"
+                            style="font-variation-settings: 'FILL' 1;">event_available</span>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-primary">12</p>
+                        <p class="text-xs text-secondary uppercase tracking-tight">Citas</p>
+                    </div>
+                </div>
+                <div class="glass-card p-md rounded-xl shadow-sm flex flex-col items-center text-center space-y-sm">
+                    <div
+                        class="w-10 h-10 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary">
+                        <span class="material-symbols-outlined"
+                            style="font-variation-settings: 'FILL' 1;">medical_information</span>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-tertiary">4</p>
+                        <p class="text-xs text-secondary uppercase tracking-tight">Médicos</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="space-y-md fade-in stagger-3">
+                <h3 class="text-lg font-bold text-on-surface px-xs">Acciones Rápidas</h3>
+                <div class="grid grid-cols-2 gap-md items-start transition-all duration-300">
+                    <a href="citas.html"
+                        class="w-full group flex flex-col items-center justify-center bg-white p-lg rounded-xl shadow-sm border border-transparent hover:border-primary transition-all duration-200">
+                        <div class="w-12 h-12 mb-sm text-primary transition-transform group-hover:scale-110">
+                            <span class="material-symbols-outlined text-4xl">calendar_month</span>
+                        </div>
+                        <span class="text-sm font-semibold">Citas</span>
+                    </a>
+
+                    <div id="cardQuickDoctors"
+                        class="group flex flex-col items-center bg-white p-lg rounded-xl shadow-sm border border-transparent hover:border-primary transition-all duration-300 cursor-pointer select-none">
+                        <div id="cardQuickDoctorsHeader" class="flex flex-col items-center justify-center w-full">
+                            <div class="w-12 h-12 mb-sm text-primary transition-transform group-hover:scale-110">
+                                <span class="material-symbols-outlined text-4xl">stethoscope</span>
+                            </div>
+                            <span class="text-sm font-semibold">Médicos</span>
+                            <span id="quickDoctorsArrow"
+                                class="material-symbols-outlined text-slate-400 text-xs mt-1 transition-transform duration-300">expand_more</span>
+                        </div>
+                        <div id="quickDoctorsListContainer"
+                            class="w-full max-h-0 overflow-hidden opacity-0 transition-all duration-300 ease-in-out space-y-sm">
+                        </div>
+                    </div>
+
+                    <a href="chatbot.html"
+                        class="w-full group flex flex-col items-center justify-center bg-white p-lg rounded-xl shadow-sm border border-transparent hover:border-primary transition-all duration-200">
+                        <div class="w-12 h-12 mb-sm text-primary transition-transform group-hover:scale-110">
+                            <span class="material-symbols-outlined text-4xl">smart_toy</span>
+                        </div>
+                        <span class="text-sm font-semibold">IA Médica</span>
+                    </a>
+
+                    <button id="btnTriggerEmergency"
+                        class="w-full group flex flex-col items-center justify-center bg-error-container p-lg rounded-xl shadow-sm border border-transparent hover:border-error transition-all duration-200">
+                        <div class="w-12 h-12 mb-sm text-error transition-transform group-hover:scale-110">
+                            <span class="material-symbols-outlined text-4xl">emergency</span>
+                        </div>
+                        <span class="text-sm font-semibold text-on-error-container">Emergency</span>
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <div id="emergencyWrapper"
+            class="fixed inset-0 z-40 hidden bg-black/40 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+            <div id="emergencyContentSheet"
+                class="absolute bottom-0 left-0 w-full h-[92vh] bg-[#f5f7fa] rounded-t-2xl shadow-2xl flex flex-col overflow-y-auto pb-12 translate-y-100">
+                <header
+                    class="flex justify-between items-center px-6 h-16 sticky top-0 z-50 bg-white border-b border-slate-100">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-pink-600"
+                            style="font-variation-settings: 'FILL' 1;">emergency</span>
+                        <h2 class="text-xl font-bold text-pink-600 tracking-tight">Atención de Emergencias</h2>
+                    </div>
+                    <button id="btnCloseEmergency"
+                        class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-100 hover:bg-slate-200 transition-colors text-slate-700 font-bold">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </header>
+                <div class="px-6 pt-6 space-y-6 max-w-md mx-auto w-full">
+                    <section class="flex flex-col items-center justify-center py-2 text-center">
+                        <div class="relative">
+                            <button id="mainPanicButton"
+                                class="emergency-glow w-44 h-44 rounded-full bg-pink-600 flex flex-col items-center justify-center text-white shadow-xl active:scale-95 transition-all duration-200">
+                                <span class="material-symbols-outlined text-5xl mb-1"
+                                    style="font-variation-settings: 'FILL' 1;">phone_in_talk</span>
+                                <span class="text-base font-bold leading-tight px-4">Llamar a Emergencias</span>
+                            </button>
+                        </div>
+                        <p class="mt-4 text-slate-500 text-xs font-semibold uppercase tracking-widest opacity-85">
+                            Presione para asistencia inmediata</p>
+                    </section>
+                    <section class="grid grid-cols-3 gap-4">
+                        <button data-service="Ambulancia"
+                            class="btn-service bg-white p-4 rounded-xl shadow-sm flex flex-col items-center gap-2 hover:bg-slate-50 transition-all active:scale-95">
+                            <div class="w-12 h-12 bg-pink-50 rounded-full flex items-center justify-center"><span
+                                    class="material-symbols-outlined text-pink-600">ambulance</span></div>
+                            <span class="text-xs font-semibold text-slate-700">Ambulancia</span>
+                        </button>
+                        <button data-service="Policía"
+                            class="btn-service bg-white p-4 rounded-xl shadow-sm flex flex-col items-center gap-2 hover:bg-slate-50 transition-all active:scale-95">
+                            <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center"><span
+                                    class="material-symbols-outlined text-slate-600">local_police</span></div>
+                            <span class="text-xs font-semibold text-slate-700">Policía</span>
+                        </button>
+                        <button data-service="Bomberos"
+                            class="btn-service bg-white p-4 rounded-xl shadow-sm flex flex-col items-center gap-2 hover:bg-slate-50 transition-all active:scale-95">
+                            <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center"><span
+                                    class="material-symbols-outlined text-red-600">fire_truck</span></div>
+                            <span class="text-xs font-semibold text-slate-700">Bomberos</span>
+                        </button>
+                    </section>
+                    <section
+                        class="bg-white rounded-xl p-4 shadow-sm border-l-4 border-pink-600 flex items-center gap-4">
+                        <div class="w-10 h-10 bg-slate-100 flex items-center justify-center rounded-full shrink-0">
+                            <span class="material-symbols-outlined text-pink-600"
+                                style="font-variation-settings: 'FILL' 1;">location_on</span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-slate-500 text-xs font-semibold">Tu ubicación actual:</p>
+                            <p id="locationText" class="text-sm font-bold text-slate-800">Sincronizando coordenadas...
+                            </p>
+                        </div>
+                    </section>
+                    <section class="space-y-4">
+                        <h3 class="text-base font-bold text-slate-800 px-1">¿Qué sucede?</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div data-symptom="chest_pain"
+                                class="card-symptom bg-white p-4 rounded-xl shadow-sm border border-transparent hover:border-pink-600 cursor-pointer transition-all group">
+                                <div class="w-8 h-8 mb-2 group-hover:scale-110 transition-transform"><span
+                                        class="material-symbols-outlined text-pink-600">heart_broken</span></div>
+                                <p class="text-sm font-bold text-slate-800">Dolor en el pecho</p>
+                            </div>
+                            <div data-symptom="breath"
+                                class="card-symptom bg-white p-4 rounded-xl shadow-sm border border-transparent hover:border-pink-600 cursor-pointer transition-all group">
+                                <div class="w-8 h-8 mb-2 group-hover:scale-110 transition-transform"><span
+                                        class="material-symbols-outlined text-pink-600">air</span></div>
+                                <p class="text-sm font-bold text-slate-800">Falta de aire</p>
+                            </div>
+                            <div data-symptom="faint"
+                                class="card-symptom bg-white p-4 rounded-xl shadow-sm border border-transparent hover:border-pink-600 cursor-pointer transition-all group">
+                                <div class="w-8 h-8 mb-2 group-hover:scale-110 transition-transform"><span
+                                        class="material-symbols-outlined text-pink-600">personal_injury</span></div>
+                                <p class="text-sm font-bold text-slate-800">Desmayo</p>
+                            </div>
+                            <div data-symptom="accident"
+                                class="card-symptom bg-white p-4 rounded-xl shadow-sm border border-transparent hover:border-pink-600 cursor-pointer transition-all group">
+                                <div class="w-8 h-8 mb-2 group-hover:scale-110 transition-transform"><span
+                                        class="material-symbols-outlined text-pink-600">car_crash</span></div>
+                                <p class="text-sm font-bold text-slate-800">Accidente vial</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <div id="recommendationModal"
+            class="fixed inset-0 z-[60] hidden flex items-end justify-center bg-black/50 backdrop-blur-sm p-4 transition-opacity duration-300 opacity-0">
+            <div id="recContainer"
+                class="bg-white w-full max-w-md rounded-t-2xl rounded-b-xl p-6 shadow-2xl transition-transform duration-300 transform translate-y-10">
+                <div class="w-12 h-1 bg-slate-200 rounded-full mx-auto mb-4"></div>
+                <div class="flex items-start gap-4 mb-4">
+                    <span id="modalIcon" class="material-symbols-outlined text-pink-600 text-4xl"></span>
+                    <div>
+                        <h3 id="modalTitle" class="text-lg font-bold text-slate-900"></h3>
+                        <p class="text-slate-500 text-sm mt-0.5">Indicación de primeros auxilios:</p>
+                    </div>
+                </div>
+                <div class="bg-slate-50 p-4 rounded-xl mb-6 border border-pink-100">
+                    <p id="modalContent" class="text-slate-700 text-sm leading-relaxed"></p>
+                </div>
+                <div class="flex gap-4">
+                    <button id="btnCloseRec"
+                        class="flex-1 py-3 px-4 rounded-xl bg-slate-100 text-slate-700 font-bold text-sm hover:bg-slate-200 transition-colors">Entendido</button>
+                    <button id="btnPedirAyudaRec"
+                        class="flex-1 py-3 px-4 rounded-xl bg-pink-600 text-white font-bold text-sm flex items-center justify-center gap-2 hover:bg-pink-700 shadow-md">
+                        <span class="material-symbols-outlined text-lg">call</span>Pedir Ayuda
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="callOverlay"
+            class="fixed inset-0 z-[100] hidden bg-slate-950/95 backdrop-blur-md flex flex-col justify-between items-center py-16 px-6 text-white transition-opacity duration-300 opacity-0">
+            <div class="flex flex-col items-center text-center mt-10 space-y-3">
+                <div
+                    class="w-20 h-20 bg-pink-600/10 rounded-full flex items-center justify-center border border-pink-500/20 mb-2">
+                    <span class="material-symbols-outlined text-4xl text-pink-500 animate-pulse"
+                        style="font-variation-settings: 'FILL' 1;">phone_in_talk</span>
+                </div>
+                <h2 id="callTargetTitle" class="text-2xl font-bold tracking-tight">Central 911</h2>
+                <div class="flex items-center gap-2">
+                    <p id="callStatusText" class="text-slate-400 text-base font-medium">Conectando...</p>
+                    <div id="callSpinner" class="w-2 h-2 bg-pink-500 rounded-full animate-ping"></div>
+                </div>
+                <p id="callDurationTimer" class="text-3xl font-mono font-semibold text-white tracking-wider hidden">
+                    00:00</p>
+            </div>
+            <div class="w-full flex flex-col items-center mb-6">
+                <button id="btnHangUp"
+                    class="w-16 h-16 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center text-white shadow-lg active:scale-90 transition-all duration-200">
+                    <span class="material-symbols-outlined text-3xl"
+                        style="font-variation-settings: 'FILL' 1;">call_end</span>
+                </button>
+                <span class="text-xs text-slate-400 mt-3 font-medium uppercase tracking-widest">Finalizar llamada</span>
+            </div>
+        </div>
+
+        <div id="toastNotification"
+            class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[110] hidden bg-slate-900 text-white font-bold text-xs px-6 py-3 rounded-xl shadow-xl border border-white/10 transition-all duration-300 opacity-0 translate-y-4">
+            Acción realizada
+        </div>
+
+        <nav
+            class="fixed bottom-0 left-0 right-0 bg-[#fff8f8] border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.03)] flex justify-around items-center py-2 z-50 pb-[calc(8px+env(safe-area-inset-bottom,0px))]">
+            <a href="home.html"
+                class="flex flex-col items-center flex-1 text-center text-xs font-semibold text-[#b90a5a]">
+                <span
+                    class="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_1,'wght'_500]">home</span>
+                <span class="mt-0.5">Inicio</span>
+            </a>
+            <a href="citas.html"
+                class="flex flex-col items-center flex-1 text-center text-xs font-medium text-gray-500 hover:text-[#b90a5a] transition-colors">
+                <span
+                    class="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_0,'wght'_400]">calendar_month</span>
+                <span class="mt-0.5">Citas</span>
+            </a>
+            <a href="chatbot.html"
+                class="flex flex-col items-center flex-1 text-center text-xs font-medium text-gray-500 hover:text-[#b90a5a] transition-colors">
+                <span
+                    class="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_0,'wght'_400]">smart_toy</span>
+                <span class="mt-0.5">IA médica</span>
+            </a>
+            <a href="perfil.html"
+                class="flex flex-col items-center flex-1 text-center text-xs font-medium text-gray-500 hover:text-[#b90a5a] transition-colors">
+                <span
+                    class="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_0,'wght'_400]">person</span>
+                <span class="mt-0.5">Perfil</span>
+            </a>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const skeletonScreen = document.getElementById('skeletonScreen');
+            const realInterface = document.getElementById('realInterface');
+
+            // --- SIMULACIÓN DE CARGA POR 2 SEGUNDOS ---
+            setTimeout(() => {
+                // Ocultar esqueleto de manera limpia
+                skeletonScreen.classList.add('hidden');
+
+                // Mostrar la interfaz real con efecto de opacidad progresivo
+                realInterface.classList.remove('hidden');
+                setTimeout(() => {
+                    realInterface.classList.remove('opacity-0');
+                    realInterface.classList.add('opacity-100');
+                }, 50);
+            }, 2000);
+
+            // --- LÓGICA DE NEGOCIO INTERNA ---
+            const guiasMedicas = {
+                chest_pain: { title: "Dolor en el pecho", icon: "heart_broken", text: "Siéntate y mantén la calma. Desabrocha la ropa ajustada. Si tienes aspirina disponible y no hay alergias, mastica una tableta de 325mg mientras llega el soporte médico." },
+                breath: { title: "Dificultad para respirar", icon: "air", text: "Ayuda a la persona a sentarse erguida. No permitas que se recueste. Si usa inhaladores recetados, asístela para aplicar sus dosis inmediatamente." },
+                faint: { title: "Desmayo", icon: "personal_injury", text: "Recuesta a la víctima boca arriba y eleva sus piernas a 30 cm. Verifica que respire con normalidad. Está prohibido darle comida o agua." },
+                accident: { title: "Accidente vial", icon: "car_crash", text: "Delimita el área para evitar nuevos choques. No muevas a los heridos a menos que haya peligro inminente de fuego o explosión. Presiona heridas sangrantes." }
+            };
+
+            const DATA_MEDICOS = [
+                { id: "doc-1", nombre: "Dr. Alberto Ruiz", especialidad: "Cardiología", calificacion: 4.9, disponible: true, proximoHorario: "Hoy, 15:30 PM", avatar: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&w=120&q=80" },
+                { id: "doc-2", nombre: "Dra. Elena Milán", especialidad: "Pediatría", calificacion: 4.8, disponible: true, proximoHorario: "Mañana, 09:00 AM", avatar: "https://images.unsplash.com/photo-1594824813573-246434e3b96f?auto=format&fit=crop&w=120&q=80" },
+                { id: "doc-3", nombre: "Dr. Carlos Mendoza", especialidad: "Neurología", calificacion: 4.7, disponible: false, proximoHorario: "Viernes, 11:00 AM", avatar: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&w=120&q=80" },
+                { id: "doc-4", nombre: "Dra. Sofía Martínez", especialidad: "Dermatología", calificacion: 5.0, disponible: true, proximoHorario: "Hoy, 17:00 PM", avatar: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&w=120&q=80" }
+            ];
+
+            let callInterval = null;
+            let dialTimeout = null;
+            let callSeconds = 0;
+            let selectedSymptomName = null;
+            let isQuickDoctorsRendered = false;
+
+            const btnTriggerEmergency = document.getElementById('btnTriggerEmergency');
+            const emergencyWrapper = document.getElementById('emergencyWrapper');
+            const emergencyContentSheet = document.getElementById('emergencyContentSheet');
+            const btnCloseEmergency = document.getElementById('btnCloseEmergency');
+            const mainPanicButton = document.getElementById('mainPanicButton');
+            const serviceButtons = document.querySelectorAll('.btn-service');
+            const symptomCards = document.querySelectorAll('.card-symptom');
+            const locationText = document.getElementById('locationText');
+
+            const recModal = document.getElementById('recommendationModal');
+            const recContainer = document.getElementById('recContainer');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalIcon = document.getElementById('modalIcon');
+            const modalContent = document.getElementById('modalContent');
+            const btnCloseRec = document.getElementById('btnCloseRec');
+            const btnPedirAyudaRec = document.getElementById('btnPedirAyudaRec');
+            const callOverlay = document.getElementById('callOverlay');
+            const callTargetTitle = document.getElementById('callTargetTitle');
+            const callStatusText = document.getElementById('callStatusText');
+            const callSpinner = document.getElementById('callSpinner');
+            const callDurationTimer = document.getElementById('callDurationTimer');
+            const btnHangUp = document.getElementById('btnHangUp');
+            const toastNotification = document.getElementById('toastNotification');
+
+            const cardQuickDoctors = document.getElementById('cardQuickDoctors');
+            const cardQuickDoctorsHeader = document.getElementById('cardQuickDoctorsHeader');
+            const quickDoctorsArrow = document.getElementById('quickDoctorsArrow');
+            const quickDoctorsListContainer = document.getElementById('quickDoctorsListContainer');
+
+            function lanzarMarcacionVoz(destinoServicio) {
+                limpiarCronometrosLlamada();
+                if ('vibrate' in navigator) navigator.vibrate([100, 50, 100]);
+
+                callTargetTitle.innerText = destinoServicio;
+                callStatusText.innerText = "Conectando con la central 911...";
+                callDurationTimer.classList.add('hidden');
+                callSpinner.classList.remove('hidden');
+
+                callOverlay.classList.remove('hidden');
+                setTimeout(() => callOverlay.classList.add('opacity-100'), 10);
+
+                dialTimeout = setTimeout(() => {
+                    callStatusText.innerText = "Llamada en curso...";
+                    callSpinner.classList.add('hidden');
+                    callDurationTimer.classList.remove('hidden');
+                    callDurationTimer.innerText = "00:00";
+
+                    callInterval = setInterval(() => {
+                        callSeconds++;
+                        const min = String(Math.floor(callSeconds / 60)).padStart(2, '0');
+                        const seg = String(callSeconds % 60).padStart(2, '0');
+                        callDurationTimer.innerText = `${min}:${seg}`;
+                    }, 1000);
+                }, 2500);
+            }
+
+            function colgarMarcacionVoz() {
+                limpiarCronometrosLlamada();
+                callOverlay.classList.remove('opacity-100');
+                setTimeout(() => {
+                    callOverlay.classList.add('hidden');
+                    lanzarToastMessage("Llamada finalizada");
+                }, 300);
+            }
+
+            function limpiarCronometrosLlamada() {
+                if (callInterval) clearInterval(callInterval);
+                if (dialTimeout) clearTimeout(dialTimeout);
+                callInterval = null;
+                dialTimeout = null;
+                callSeconds = 0;
+            }
+
+            function lanzarToastMessage(texto) {
+                toastNotification.innerText = texto;
+                toastNotification.classList.remove('hidden');
+                setTimeout(() => {
+                    toastNotification.classList.remove('opacity-0', 'translate-y-4');
+                    toastNotification.classList.add('opacity-100', 'translate-y-0');
+                }, 10);
+
+                setTimeout(() => {
+                    toastNotification.classList.remove('opacity-100', 'translate-y-0');
+                    toastNotification.classList.add('opacity-0', 'translate-y-4');
+                    setTimeout(() => toastNotification.classList.add('hidden'), 300);
+                }, 3000);
+            }
+
+            function ejecutarLocalizacionGPS() {
+                locationText.innerText = "Buscando satélites...";
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (pos) => locationText.innerText = `Lat ${pos.coords.latitude.toFixed(4)}, Lon ${pos.coords.longitude.toFixed(4)}`,
+                        () => locationText.innerText = "Talara, Piura (GPS Estimado)",
+                        { enableHighAccuracy: true, timeout: 5000 }
+                    );
+                } else {
+                    locationText.innerText = "Talara, Piura";
+                }
+            }
+
+            window.abrirEmergencia = function () {
+                document.body.style.overflow = 'hidden';
+                emergencyWrapper.classList.remove('hidden');
+                setTimeout(() => {
+                    emergencyWrapper.classList.remove('opacity-0');
+                    emergencyWrapper.classList.add('opacity-100');
+                    emergencyContentSheet.classList.remove('animate-slide-down');
+                    emergencyContentSheet.classList.add('animate-slide-up');
+                }, 10);
+                ejecutarLocalizacionGPS();
+            };
+
+            window.cerrarEmergencia = function () {
+                emergencyWrapper.classList.remove('opacity-100');
+                emergencyWrapper.classList.add('opacity-0');
+                emergencyContentSheet.classList.remove('animate-slide-up');
+                emergencyContentSheet.classList.add('animate-slide-down');
+                setTimeout(() => {
+                    emergencyWrapper.classList.add('hidden');
+                    document.body.style.overflow = '';
+                }, 350);
+            };
+
+            window.openSymptomModal = function (clave) {
+                const info = guiasMedicas[clave];
+                if (!info) return;
+                selectedSymptomName = info.title;
+                modalTitle.innerText = info.title;
+                modalIcon.innerText = info.icon;
+                modalContent.innerText = info.text;
+
+                recModal.classList.remove('hidden');
+                recModal.classList.add('flex');
+                setTimeout(() => {
+                    recModal.classList.add('opacity-100');
+                    recContainer.classList.remove('translate-y-10');
+                }, 10);
+            };
+
+            window.closeSymptomModal = function () {
+                recModal.classList.remove('opacity-100');
+                recContainer.classList.add('translate-y-10');
+                setTimeout(() => {
+                    recModal.classList.remove('flex');
+                    recModal.classList.add('hidden');
+                    selectedSymptomName = null;
+                }, 300);
+            };
+
+            function generarCardMedicoHTML(medico) {
+                const badge = medico.disponible
+                    ? `<span class="inline-flex items-center gap-1 text-[10px] font-bold text-tertiary bg-tertiary-container/10 px-2 py-0.5 rounded-full">Disponible</span>`
+                    : `<span class="inline-flex items-center gap-1 text-[10px] font-bold text-error bg-error-container/40 px-2 py-0.5 rounded-full">Ocupado</span>`;
+
+                return `
+                    <div class="bg-slate-50 p-sm rounded-lg border border-slate-100 flex flex-col space-y-xs text-left">
+                        <div class="flex items-center gap-sm">
+                            <div class="w-9 h-9 rounded-lg bg-slate-200 overflow-hidden shrink-0">
+                                <img src="${medico.avatar}" alt="${medico.nombre}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex items-center justify-between gap-1">
+                                    <h4 class="font-bold text-xs text-on-surface truncate">${medico.nombre}</h4>
+                                    ${badge}
+                                </div>
+                                <p class="text-[11px] text-slate-500 truncate">${medico.especialidad}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between pt-xs border-t border-slate-200/40 gap-sm">
+                            <span class="text-[10px] text-on-surface font-medium flex items-center gap-0.5">
+                                <span class="material-symbols-outlined text-[11px] text-slate-400">schedule</span>${medico.proximoHorario}
+                            </span>
+                            <button data-nombre="${medico.nombre}" type="button"
+                                class="btn-book-appointment px-2.5 py-1 bg-primary hover:bg-pink-700 text-white text-[10px] font-bold rounded transition-all active:scale-95 shadow-xs whitespace-nowrap">
+                                Agendar
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            cardQuickDoctors.addEventListener('click', (e) => {
+                if (e.target.closest('.btn-book-appointment')) return;
+                const isExpanded = cardQuickDoctors.classList.contains('col-span-2');
+
+                if (!isExpanded) {
+                    if (!isQuickDoctorsRendered) {
+                        quickDoctorsListContainer.innerHTML = DATA_MEDICOS.map(generarCardMedicoHTML).join('');
+                        isQuickDoctorsRendered = true;
+                    }
+                    cardQuickDoctors.classList.add('col-span-2', 'p-md');
+                    cardQuickDoctors.classList.remove('p-lg', 'hover:border-primary');
+                    quickDoctorsArrow.classList.add('rotate-180');
+                    quickDoctorsListContainer.classList.remove('max-h-0', 'opacity-0');
+                    quickDoctorsListContainer.classList.add('max-h-[1000px]', 'opacity-100', 'mt-4');
+                } else {
+                    if (e.target.closest('#cardQuickDoctorsHeader') || e.target === cardQuickDoctors) {
+                        quickDoctorsListContainer.classList.remove('max-h-[1000px]', 'opacity-100', 'mt-4');
+                        quickDoctorsListContainer.classList.add('max-h-0', 'opacity-0');
+                        quickDoctorsArrow.classList.remove('rotate-180');
+                        setTimeout(() => {
+                            cardQuickDoctors.classList.remove('col-span-2', 'p-md');
+                            cardQuickDoctors.classList.add('p-lg', 'hover:border-primary');
+                        }, 250);
+                    }
+                }
+            });
+
+            btnTriggerEmergency.addEventListener('click', window.abrirEmergencia);
+            btnCloseEmergency.addEventListener('click', window.cerrarEmergencia);
+            mainPanicButton.addEventListener('click', () => lanzarMarcacionVoz("Emergencias Central"));
+            btnHangUp.addEventListener('click', colgarMarcacionVoz);
+            btnCloseRec.addEventListener('click', window.closeSymptomModal);
+
+            btnPedirAyudaRec.addEventListener('click', () => {
+                const contextSymptom = selectedSymptomName ? `Soporte: ${selectedSymptomName}` : "Central de Auxilio";
+                window.closeSymptomModal();
+                lanzarMarcacionVoz(contextSymptom);
+            });
+
+            document.addEventListener('click', (e) => {
+                const appointmentBtn = e.target.closest('.btn-book-appointment');
+                if (appointmentBtn) {
+                    const docName = appointmentBtn.getAttribute('data-nombre');
+                    lanzarToastMessage(`Cita con ${docName} agendada correctamente`);
+                }
+            });
+
+            serviceButtons.forEach(btn => {
+                btn.addEventListener('click', () => lanzarMarcacionVoz(`Servicio de ${btn.getAttribute('data-service')}`));
+            });
+
+            symptomCards.forEach(card => {
+                card.addEventListener('click', () => window.openSymptomModal(card.getAttribute('data-symptom')));
+            });
+
+            emergencyWrapper.addEventListener('click', (e) => {
+                if (e.target === emergencyWrapper) window.cerrarEmergencia();
+            });
+
+            recModal.addEventListener('click', (e) => {
+                if (e.target === recModal) window.closeSymptomModal();
+            });
+        });
+    </script>
+</body>
+
+</html>

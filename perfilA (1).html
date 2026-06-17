@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Perfil de Administrador - Mediquick</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface": "#f8f9ff",
+                    "surface-bright": "#f8f9ff",
+                    "on-secondary-fixed-variant": "#4b454a",
+                    "on-tertiary-container": "#fcfcfc",
+                    "on-secondary-fixed": "#1f1a1e",
+                    "tertiary": "#5a5c5c",
+                    "surface-variant": "#d3e4fe",
+                    "surface-tint": "#b4136d",
+                    "on-error": "#ffffff",
+                    "inverse-primary": "#ffb0cd",
+                    "secondary-container": "#e7dde3",
+                    "secondary": "#635c61",
+                    "tertiary-container": "#737575",
+                    "primary": "#b10e6b",
+                    "on-primary-fixed": "#3e0022",
+                    "on-tertiary": "#ffffff",
+                    "outline-variant": "#debec8",
+                    "primary-container": "#d23284",
+                    "on-surface": "#0b1c30",
+                    "on-surface-variant": "#574048",
+                    "secondary-fixed": "#eae0e6",
+                    "inverse-surface": "#213145",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "on-error-container": "#93000a",
+                    "tertiary-fixed": "#e2e2e2",
+                    "inverse-on-surface": "#eaf1ff",
+                    "primary-fixed-dim": "#ffb0cd",
+                    "surface-container": "#e5eeff",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "error-container": "#ffdad6",
+                    "surface-container-high": "#dce9ff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#cbdbf5",
+                    "primary-fixed": "#ffd9e4",
+                    "on-secondary-container": "#686066",
+                    "surface-container-low": "#eff4ff",
+                    "secondary-fixed-dim": "#cec4ca",
+                    "on-secondary": "#ffffff",
+                    "outline": "#8b7079",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "background": "#f8f9ff",
+                    "surface-container-highest": "#d3e4fe",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed-variant": "#8c0053",
+                    "on-primary-container": "#fffbff",
+                    "error": "#ba1a1a",
+                    "on-background": "#0b1c30"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-padding-mb": "16px",
+                    "container-padding-dt": "32px",
+                    "unit": "8px",
+                    "gutter": "24px",
+                    "sidebar-width": "260px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background: linear-gradient(135deg, #fff5f8 0%, #f8f9ff 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: #0b1c30;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .nav-active {
+            color: #b10e6b;
+        }
+        .nav-active .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal.active {
+            display: flex;
+        }
+    </style>
+</head>
+<body class="pb-24">
+<!-- Header Section -->
+<header class="px-container-padding-mb pt-8 pb-6">
+<div class="glass-panel rounded-xl p-6 flex flex-col items-center text-center shadow-sm">
+<div class="relative mb-4">
+<img alt="Dr. Smith" class="w-24 h-24 rounded-full object-cover border-4 border-white shadow-md" src="https://lh3.googleusercontent.com/aida/AP1WRLvYsSvknzIagzsksXkOn92um7kuxSY7_WRarZWDhYsjqKyZ30hy1aODkkawYPob-kf_up9clSpETZiBl5y1JH3jrXNtp3InOYMg9L4Lan_u9HUY4IcWUO25LybzR2hoAj-XS1-rufV8hbXM-jx2tJiOzc6Pp8Y5oUas_b17fJqVw-9s5GkuGqfN40mpu_DgXUbK1S5IViw9XLhLJ_DQLdyx66WmxCftwY9huGATZqyjcAwcVQ90vd4mW9q5"/>
+<div class="absolute bottom-0 right-0 bg-green-500 w-5 h-5 rounded-full border-2 border-white"></div>
+</div>
+<h1 class="text-headline-md text-on-surface">Dr. Smith</h1>
+<p class="text-primary font-medium">Director Médico</p>
+<div class="mt-2 flex items-center gap-2 text-label-sm text-secondary">
+<span class="bg-secondary-fixed px-2 py-1 rounded">#ADM-7822</span>
+<span>•</span>
+<span>Activo desde 2021</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="px-container-padding-mb space-y-4">
+<!-- Personal Information -->
+<section class="glass-panel rounded-xl p-5 shadow-sm">
+<div class="flex justify-between items-center mb-4">
+<h2 class="font-semibold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">person</span>
+                    Información Personal
+                </h2>
+<button class="text-primary text-label-sm font-bold hover:underline" onclick="openModal('edit-profile-modal')">Editar información personal</button>
+</div>
+<div class="space-y-3">
+<div class="flex flex-col">
+<span class="text-label-sm text-secondary uppercase tracking-wider">Email</span>
+<span class="text-body-md font-medium" id="display-email">smith.medical@mediquick.com</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm text-secondary uppercase tracking-wider">Teléfono</span>
+<span class="text-body-md font-medium" id="display-phone">+34 600 000 000</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm text-secondary uppercase tracking-wider">Especialidad</span>
+<span class="text-body-md font-medium" id="display-specialty">Gestión Sanitaria / Cardiología</span>
+</div>
+<div class="flex flex-col">
+<span class="text-label-sm text-secondary uppercase tracking-wider">Ubicación</span>
+<span class="text-body-md font-medium" id="display-location">Madrid, España</span>
+</div>
+</div>
+</section>
+<!-- Security & Privacy -->
+<section class="glass-panel rounded-xl p-5 shadow-sm">
+<h2 class="font-semibold text-on-surface flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-[20px]">shield</span>
+                Seguridad y Privacidad
+            </h2>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex-1 pr-4">
+<p class="text-body-md font-medium">Autenticación de dos factores</p>
+<p class="text-label-sm text-secondary leading-tight">Añade una capa extra de seguridad</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" onchange="showToast('Estado de 2FA actualizado')" type="checkbox"/>
+<div class="w-11 h-6 bg-secondary-container peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<button class="w-full flex items-center justify-between text-body-md py-1" onclick="openModal('activity-log-modal')">
+<span class="flex items-center gap-3">
+<span class="material-symbols-outlined text-secondary">history</span>
+                        Registro de actividad
+                    </span>
+<span class="material-symbols-outlined text-secondary">chevron_right</span>
+</button>
+</div>
+</section>
+<!-- Configuration -->
+<section class="glass-panel rounded-xl p-5 shadow-sm">
+<h2 class="font-semibold text-on-surface flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary text-[20px]">settings</span>
+                Configuración
+            </h2>
+<div class="space-y-1">
+<button class="w-full flex items-center justify-between py-3 border-b border-outline-variant/30 text-left" onclick="openModal('password-modal')">
+<span class="flex items-center gap-3 text-body-md">
+<span class="material-symbols-outlined text-secondary">lock</span>
+                        Cambiar Contraseña
+                    </span>
+<span class="material-symbols-outlined text-secondary">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between py-3 border-b border-outline-variant/30 text-left" onclick="toggleNotifications()">
+<span class="flex items-center gap-3 text-body-md">
+<span class="material-symbols-outlined text-secondary">notifications</span>
+                        Notificaciones
+                    </span>
+<span class="text-secondary text-label-sm font-semibold uppercase" id="notif-status">Activadas</span>
+</button>
+<button class="w-full flex items-center justify-between py-3 text-left" onclick="openModal('language-modal')">
+<span class="flex items-center gap-3 text-body-md">
+<span class="material-symbols-outlined text-secondary">language</span>
+                        Idioma
+                    </span>
+<span class="text-primary font-medium text-body-md" id="display-language">Español</span>
+</button>
+</div>
+</section>
+<!-- Logout Section -->
+<section class="pt-4 pb-8">
+<button class="w-full bg-white border border-error text-error font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-sm hover:bg-error-container/20 transition-colors" onclick="openModal('logout-modal')">
+<span class="material-symbols-outlined">logout</span>
+                Cerrar Sesión
+            </button>
+<p class="text-center text-label-sm text-secondary mt-4 px-4 leading-tight">
+                Al cerrar sesión, se requerirán sus credenciales de seguridad para volver a acceder al panel administrativo.
+            </p>
+</section>
+</main>
+<!-- Bottom Navigation -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-outline-variant/30 px-6 py-3 flex justify-between items-center z-50">
+<button class="flex flex-col items-center gap-1 text-secondary">
+<span class="material-symbols-outlined">home</span>
+<span class="text-[10px] font-medium">Inicio</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-secondary">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="text-[10px] font-medium">Gráficos</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-secondary">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-medium">Citas</span>
+</button>
+<button class="flex flex-col items-center gap-1 nav-active">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-bold">Perfil</span>
+</button>
+</nav>
+<!-- Modals -->
+<!-- Edit Profile Modal -->
+<div class="modal" id="edit-profile-modal">
+<div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl space-y-4">
+<h3 class="text-headline-md font-bold text-on-surface">Editar Perfil</h3>
+<div class="space-y-4">
+<div>
+<label class="block text-label-sm text-secondary mb-1">Email</label>
+<input class="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary" id="edit-email" type="email" value="smith.medical@mediquick.com"/>
+</div>
+<div>
+<label class="block text-label-sm text-secondary mb-1">Teléfono</label>
+<input class="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary" id="edit-phone" type="text" value="+34 600 000 000"/>
+</div>
+<div>
+<label class="block text-label-sm text-secondary mb-1">Especialidad</label>
+<input class="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary" id="edit-specialty" type="text" value="Gestión Sanitaria / Cardiología"/>
+</div>
+<div>
+<label class="block text-label-sm text-secondary mb-1">Ubicación</label>
+<input class="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary" id="edit-location" type="text" value="Madrid, España"/>
+</div>
+</div>
+<div class="flex gap-3 pt-2">
+<button class="flex-1 py-3 rounded-xl border border-outline font-semibold text-secondary" onclick="closeModal('edit-profile-modal')">Cancelar</button>
+<button class="flex-1 py-3 rounded-xl bg-primary text-white font-semibold" onclick="saveProfile()">Guardar</button>
+</div>
+</div>
+</div>
+<!-- Password Modal -->
+<div class="modal" id="password-modal">
+<div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl space-y-4">
+<h3 class="text-headline-md font-bold text-on-surface">Cambiar Contraseña</h3>
+<div class="space-y-4">
+<div>
+<label class="block text-label-sm text-secondary mb-1">Contraseña Actual</label>
+<input class="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary" type="password"/>
+</div>
+<div>
+<label class="block text-label-sm text-secondary mb-1">Nueva Contraseña</label>
+<input class="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary" type="password"/>
+</div>
+<div>
+<label class="block text-label-sm text-secondary mb-1">Confirmar Nueva Contraseña</label>
+<input class="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-primary" type="password"/>
+</div>
+</div>
+<div class="flex gap-3 pt-2">
+<button class="flex-1 py-3 rounded-xl border border-outline font-semibold text-secondary" onclick="closeModal('password-modal')">Cancelar</button>
+<button class="flex-1 py-3 rounded-xl bg-primary text-white font-semibold" onclick="submitPassword()">Cambiar</button>
+</div>
+</div>
+</div>
+<!-- Activity Log Modal -->
+<div class="modal" id="activity-log-modal">
+<div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl flex flex-col max-h-[80vh]">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-headline-md font-bold text-on-surface">Registro de Actividad</h3>
+<button class="material-symbols-outlined text-secondary" onclick="closeModal('activity-log-modal')">close</button>
+</div>
+<div class="overflow-y-auto flex-1 space-y-4">
+<div class="border-b border-outline-variant/30 pb-3">
+<p class="text-body-md font-medium">Inicio de sesión exitoso</p>
+<p class="text-label-sm text-secondary">Hoy, 09:12 AM • Madrid, ES (Chrome)</p>
+</div>
+<div class="border-b border-outline-variant/30 pb-3">
+<p class="text-body-md font-medium">Cambio de contraseña</p>
+<p class="text-label-sm text-secondary">Ayer, 18:45 PM • Madrid, ES (iOS App)</p>
+</div>
+<div class="border-b border-outline-variant/30 pb-3">
+<p class="text-body-md font-medium">Actualización de perfil</p>
+<p class="text-label-sm text-secondary">12 Oct 2023, 10:20 AM • Madrid, ES (Chrome)</p>
+</div>
+<div class="pb-3">
+<p class="text-body-md font-medium">Nuevo dispositivo detectado</p>
+<p class="text-label-sm text-secondary">05 Oct 2023, 08:05 AM • Barcelona, ES (Safari)</p>
+</div>
+</div>
+<button class="w-full mt-4 py-3 rounded-xl bg-secondary-container text-on-secondary-container font-semibold" onclick="closeModal('activity-log-modal')">Cerrar</button>
+</div>
+</div>
+<!-- Language Modal -->
+<div class="modal" id="language-modal">
+<div class="bg-white rounded-2xl w-full max-w-xs p-6 shadow-xl space-y-4">
+<h3 class="text-headline-md font-bold text-on-surface">Seleccionar Idioma</h3>
+<div class="space-y-2">
+<button class="w-full p-4 rounded-xl border border-outline-variant hover:bg-primary/10 flex justify-between items-center group" onclick="setLanguage('Español')">
+<span class="font-medium">Español</span>
+<span class="material-symbols-outlined text-primary hidden group-[.active]:block">check</span>
+</button>
+<button class="w-full p-4 rounded-xl border border-outline-variant hover:bg-primary/10 flex justify-between items-center group" onclick="setLanguage('English')">
+<span class="font-medium">English</span>
+<span class="material-symbols-outlined text-primary hidden">check</span>
+</button>
+</div>
+<button class="w-full py-3 rounded-xl border border-outline font-semibold text-secondary" onclick="closeModal('language-modal')">Cerrar</button>
+</div>
+</div>
+<!-- Logout Confirmation Modal -->
+<div class="modal" id="logout-modal">
+<div class="bg-white rounded-2xl w-full max-w-xs p-6 shadow-xl text-center space-y-4">
+<div class="w-16 h-16 bg-error-container/30 rounded-full flex items-center justify-center mx-auto text-error">
+<span class="material-symbols-outlined text-3xl">logout</span>
+</div>
+<h3 class="text-headline-md font-bold text-on-surface">¿Cerrar Sesión?</h3>
+<p class="text-body-md text-secondary">¿Estás seguro de que deseas salir del panel administrativo?</p>
+<div class="flex flex-col gap-3 pt-2">
+<button class="w-full py-3 rounded-xl bg-error text-white font-bold" onclick="doLogout()">Sí, Cerrar Sesión</button>
+<button class="w-full py-3 rounded-xl bg-secondary-container text-on-secondary-container font-semibold" onclick="closeModal('logout-modal')">Cancelar</button>
+</div>
+</div>
+</div>
+<!-- Toast Component -->
+<div class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-on-surface text-white px-6 py-3 rounded-full text-body-md shadow-lg opacity-0 transition-opacity pointer-events-none z-[200]" id="toast">
+        Acción realizada con éxito
+    </div>
+<script>
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.opacity = '0';
+            }, 3000);
+        }
+
+        function saveProfile() {
+            const email = document.getElementById('edit-email').value;
+            const phone = document.getElementById('edit-phone').value;
+            const specialty = document.getElementById('edit-specialty').value;
+            const location = document.getElementById('edit-location').value;
+
+            document.getElementById('display-email').textContent = email;
+            document.getElementById('display-phone').textContent = phone;
+            document.getElementById('display-specialty').textContent = specialty;
+            document.getElementById('display-location').textContent = location;
+
+            closeModal('edit-profile-modal');
+            showToast('Perfil actualizado correctamente');
+        }
+
+        function submitPassword() {
+            closeModal('password-modal');
+            showToast('Contraseña actualizada');
+        }
+
+        function toggleNotifications() {
+            const status = document.getElementById('notif-status');
+            const isActive = status.textContent === 'ACTIVADAS';
+            status.textContent = isActive ? 'DESACTIVADAS' : 'ACTIVADAS';
+            status.classList.toggle('text-secondary', !isActive);
+            status.classList.toggle('text-primary', isActive); // Just a small visual cue
+            showToast(`Notificaciones ${isActive ? 'desactivadas' : 'activadas'}`);
+        }
+
+        function setLanguage(lang) {
+            document.getElementById('display-language').textContent = lang;
+            closeModal('language-modal');
+            showToast(`Idioma cambiado a ${lang}`);
+        }
+
+        function doLogout() {
+            closeModal('logout-modal');
+            document.body.innerHTML = `
+                <div class="fixed inset-0 flex flex-col items-center justify-center bg-background p-6 text-center">
+                    <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-6">
+                        <span class="material-symbols-outlined text-4xl">check_circle</span>
+                    </div>
+                    <h1 class="text-headline-lg text-on-surface mb-2">Sesión Cerrada</h1>
+                    <p class="text-body-lg text-secondary mb-8">Has salido correctamente del sistema Mediquick.</p>
+                    <button onclick="location.reload()" class="bg-primary text-white px-8 py-3 rounded-xl font-bold shadow-md">Volver a Ingresar</button>
+                </div>
+            `;
+        }
+
+        // Close modal when clicking background
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+    </script>
+</body></html>

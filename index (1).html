@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Mediquick - Iniciar Sesión</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #ff4d8d 0%, #ff7aa2 100%);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fff8f8;
+            overflow-x: hidden;
+            min-height: max(884px, 100dvh);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-primary-gradient {
+            background: var(--primary-gradient);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-primary-gradient:hover {
+            transform: scale(1.02);
+            filter: brightness(1.05);
+            box-shadow: 0 10px 20px -5px rgba(255, 77, 141, 0.4);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loader-ring {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #ffffff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .input-focus-effect:focus-within {
+            border-color: #b90a5a;
+            box-shadow: 0 0 0 4px rgba(185, 10, 90, 0.1);
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .animate-toast {
+            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px) translateX(-50%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0) translateX(-50%);
+                opacity: 1;
+            }
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-surface": "#26181b",
+                        "on-error": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "tertiary-container": "#00a92a",
+                        "error-container": "#ffdad6",
+                        "surface-tint": "#b90a5a",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#fff0f2",
+                        "on-surface-variant": "#594046",
+                        "secondary": "#5f5e5e",
+                        "on-tertiary-container": "#003306",
+                        "surface-variant": "#f7dce1",
+                        "surface-container": "#ffe8ec",
+                        "surface-container-highest": "#f7dce1",
+                        "on-primary-fixed": "#3f001a",
+                        "inverse-surface": "#3c2c30",
+                        "tertiary": "#006e18",
+                        "on-primary": "#ffffff",
+                        "outline": "#8d7076",
+                        "secondary-container": "#e4e2e1",
+                        "primary": "#b90a5a",
+                        "primary-container": "#ff4d8d",
+                        "on-error-container": "#93000a",
+                        "on-primary-container": "#5b0028",
+                        "background": "#fff8f8",
+                        "outline-variant": "#e1bec5",
+                        "on-background": "#26181b"
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="flex items-center justify-center min-h-screen p-5 selection:bg-primary/20">
+    <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary-container/20 blur-[120px] rounded-full">
+        </div>
+        <div
+            class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-tertiary-container/10 blur-[120px] rounded-full">
+        </div>
+    </div>
+
+    <main class="w-full max-w-md relative">
+
+        <div id="skeletonContainer"
+            class="glass-card shadow-lg rounded-2xl p-8 md:p-12 flex flex-col items-center animate-pulse transition-opacity duration-300">
+            <div class="w-14 h-14 bg-gray-300/60 rounded-xl mb-4"></div>
+            <div class="w-32 h-6 bg-gray-300/60 rounded-md mb-2"></div>
+            <div class="w-48 h-3 bg-gray-300/40 rounded-md mb-12"></div>
+
+            <div class="w-full space-y-6">
+                <div class="space-y-2">
+                    <div class="w-24 h-3 bg-gray-300/50 rounded-md"></div>
+                    <div class="w-full h-12 bg-gray-300/40 rounded-xl"></div>
+                </div>
+                <div class="space-y-2">
+                    <div class="w-20 h-3 bg-gray-300/50 rounded-md"></div>
+                    <div class="w-full h-12 bg-gray-300/40 rounded-xl"></div>
+                </div>
+                <div class="flex justify-end">
+                    <div class="w-28 h-3 bg-gray-300/40 rounded-md"></div>
+                </div>
+                <div class="w-full h-14 bg-gray-300/60 rounded-xl flex items-center justify-center mt-4">
+                    <div class="w-24 h-4 bg-gray-400/40 rounded-md"></div>
+                </div>
+                <div class="flex flex-col items-center justify-center py-2 space-y-2">
+                    <div class="w-24 h-3 bg-gray-300/40 rounded-md"></div>
+                </div>
+                <div class="w-full h-12 bg-gray-300/40 rounded-xl flex items-center justify-center">
+                    <div class="w-5 h-5 bg-gray-400/30 rounded-full mr-2"></div>
+                    <div class="w-32 h-3 bg-gray-300/50 rounded-md"></div>
+                </div>
+                <div class="flex flex-col items-center space-y-2 pt-2">
+                    <div class="w-40 h-3 bg-gray-300/40 rounded-md"></div>
+                    <div class="w-24 h-3 bg-gray-300/40 rounded-md"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="realInterfaceContainer"
+            class="hidden opacity-0 glass-card shadow-lg rounded-2xl p-8 md:p-12 flex flex-col items-center">
+            <div class="mb-8 flex flex-col items-center gap-2 text-center">
+                <div class="w-16 h-16 bg-primary-container rounded-2xl flex items-center justify-center shadow-md mb-2">
+                    <span class="material-symbols-outlined text-white text-4xl"
+                        style="font-variation-settings: 'FILL' 1;">monitor_heart</span>
+                </div>
+                <h1 id="mainBrandTitle" class="text-3xl font-bold text-on-surface tracking-tight">Mediquick</h1>
+                <p id="mainBrandSubtitle" class="text-xs font-semibold text-secondary tracking-wide uppercase">
+                    Healthcare Mobile Premium</p>
+            </div>
+
+            <form class="w-full space-y-4 block animate-fade" id="loginForm">
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-on-surface-variant ml-1" for="email">Email o
+                        Usuario</label>
+                    <div
+                        class="relative group input-focus-effect flex items-center bg-white border border-outline-variant rounded-xl transition-all duration-300">
+                        <span class="material-symbols-outlined absolute left-4 text-on-surface-variant/50">mail</span>
+                        <input
+                            class="w-full bg-transparent border-none py-3 pl-12 pr-4 text-base focus:ring-0 text-on-surface"
+                            id="email" placeholder="nombre@ejemplo.com" type="email" />
+                    </div>
+                    <span class="hidden text-xs text-error ml-1 font-medium" id="emailError">Por favor ingresa un correo
+                        válido.</span>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-on-surface-variant ml-1" for="password">Contraseña</label>
+                    <div
+                        class="relative group input-focus-effect flex items-center bg-white border border-outline-variant rounded-xl transition-all duration-300">
+                        <span class="material-symbols-outlined absolute left-4 text-on-surface-variant/50">lock</span>
+                        <input
+                            class="w-full bg-transparent border-none py-3 pl-12 pr-12 text-base focus:ring-0 text-on-surface"
+                            id="password" placeholder="••••••••" type="password" />
+                        <button
+                            class="absolute right-4 text-on-surface-variant/50 hover:text-primary transition-colors focus:outline-none"
+                            id="togglePassword" type="button">
+                            <span class="material-symbols-outlined">visibility</span>
+                        </button>
+                    </div>
+                    <span class="hidden text-xs text-error ml-1 font-medium" id="passwordError">La contraseña es
+                        obligatoria (mínimo 6 caracteres).</span>
+                </div>
+
+                <div class="flex justify-end">
+                    <a id="recoverPasswordBtn" class="text-xs font-semibold text-primary hover:underline transition-all"
+                        href="#">Recuperar contraseña</a>
+                </div>
+
+                <button
+                    class="w-full btn-primary-gradient py-4 rounded-xl text-white font-semibold flex items-center justify-center gap-2 shadow-md active:scale-[0.99]"
+                    id="submitBtn" type="submit">
+                    <span id="btnText">Iniciar sesión</span>
+                    <div class="hidden loader-ring" id="loader"></div>
+                </button>
+
+                <div class="flex items-center gap-4 py-2">
+                    <div class="h-[1px] flex-1 bg-outline-variant/30"></div>
+                    <span class="text-xs font-semibold text-secondary/60">o continúa con</span>
+                    <div class="h-[1px] flex-1 bg-outline-variant/30"></div>
+                </div>
+
+                <div class="space-y-2">
+                    <button id="googleOAuthBtn"
+                        class="w-full py-3 px-4 bg-surface-container rounded-xl text-base text-on-surface flex items-center justify-center gap-3 hover:bg-surface-variant transition-colors border border-outline-variant/10 font-medium active:scale-[0.99]"
+                        type="button">
+                        <svg class="w-5 h-5" viewBox="0 0 24 24">
+                            <path
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                fill="#4285F4"></path>
+                            <path
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                fill="#34A853"></path>
+                            <path
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                                fill="#FBBC05"></path>
+                            <path
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 12-4.53z"
+                                fill="#EA4335"></path>
+                        </svg>
+                        Continuar con Google
+                    </button>
+                    <div class="mt-4 text-center">
+                        <p class="text-sm text-gray-600">
+                            ¿No tienes cuenta? <a href="crearcuenta.html"
+                                class="text-primary font-bold hover:underline">Crear cuenta</a>
+                        </p>
+                    </div>
+                </div>
+            </form>
+
+            <form class="w-full space-y-4 hidden animate-fade" id="adminLoginForm">
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-primary ml-1" for="adminToken">Código de Licencia
+                        Médica</label>
+                    <div
+                        class="relative group input-focus-effect flex items-center bg-white border border-outline-variant rounded-xl transition-all duration-300">
+                        <span class="material-symbols-outlined absolute left-4 text-primary/70">shield_person</span>
+                        <input
+                            class="w-full bg-transparent border-none py-3 pl-12 pr-4 text-base focus:ring-0 text-on-surface"
+                            id="adminToken" placeholder="admin@mediquick.com" type="text" />
+                    </div>
+                    <span class="hidden text-xs text-error ml-1 font-medium" id="adminTokenError">El código de licencia
+                        es obligatorio.</span>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-on-surface-variant ml-1" for="adminPassword">Clave Maestra
+                        Firma Digital</label>
+                    <div
+                        class="relative group input-focus-effect flex items-center bg-white border border-outline-variant rounded-xl transition-all duration-300">
+                        <span class="material-symbols-outlined absolute left-4 text-on-surface-variant/50">token</span>
+                        <input
+                            class="w-full bg-transparent border-none py-3 pl-12 pr-12 text-base focus:ring-0 text-on-surface"
+                            id="adminPassword" placeholder="••••••••" type="password" />
+                    </div>
+                    <span class="hidden text-xs text-error ml-1 font-medium" id="adminPasswordError">Introduce la clave
+                        maestra de seguridad.</span>
+                </div>
+
+                <button
+                    class="w-full bg-on-surface hover:bg-on-surface-variant py-4 rounded-xl text-white font-semibold flex items-center justify-center gap-2 shadow-lg transition-colors mt-2 active:scale-[0.99]"
+                    id="adminSubmitBtn" type="submit">
+                    <span id="adminBtnText">Autenticar Infraestructura</span>
+                    <div class="hidden loader-ring" id="adminLoader"></div>
+                </button>
+
+                <button id="backToPatientBtn"
+                    class="w-full py-2 text-xs font-bold text-primary hover:underline transition-all flex items-center justify-center gap-1"
+                    type="button">
+                    <span class="material-symbols-outlined text-sm">arrow_back</span> Volver a Acceso de Pacientes
+                </button>
+            </form>
+
+            <button id="toggleAdminModeBtn"
+                class="mt-6 text-xs font-semibold text-secondary hover:text-on-surface transition-colors" type="button">
+                Acceso Administrador
+            </button>
+        </div>
+
+        <p id="supportLink" class="hidden text-center mt-4 text-xs text-secondary/70">
+            ¿Necesitas ayuda? <a id="supportBtn" class="text-primary font-medium hover:underline" href="#">Soporte
+                Técnico</a>
+        </p>
+    </main>
+
+    <div id="googleModal"
+        class="hidden fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div
+            class="w-full max-w-xs bg-white rounded-2xl p-5 shadow-2xl flex flex-col items-center space-y-4 transform scale-95 transition-transform duration-300">
+            <svg class="w-9 h-9" viewBox="0 0 24 24">
+                <path
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                    fill="#4285F4"></path>
+                <path
+                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                    fill="#34A853"></path>
+                <path
+                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                    fill="#FBBC05"></path>
+                <path
+                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 12-4.53z"
+                    fill="#EA4335"></path>
+            </svg>
+            <div class="text-center">
+                <h3 class="text-sm font-bold text-on-surface">Elige una cuenta</h3>
+                <p class="text-[11px] text-secondary">para continuar en <span
+                        class="text-primary font-semibold">Mediquick</span></p>
+            </div>
+
+            <div class="w-full space-y-1.5">
+                <button type="button"
+                    class="google-user-row w-full flex items-center p-2 rounded-xl border border-gray-100 hover:bg-surface-container/40 text-left transition-colors"
+                    data-email="admin@mediquick.com" data-name="Dr. Smith (Admin)">
+                    <img class="w-7 h-7 rounded-full object-cover mr-3 border"
+                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=128"
+                        alt="Profile" />
+                    <div class="truncate">
+                        <p class="text-xs font-bold text-on-surface leading-tight">Dr. Smith</p>
+                        <p class="text-[10px] text-secondary truncate">admin@mediquick.com</p>
+                    </div>
+                </button>
+            </div>
+            <button id="closeGoogleModal" type="button"
+                class="text-xs font-medium text-secondary hover:text-on-surface pt-1">Cancelar</button>
+        </div>
+    </div>
+
+    <div id="toast"
+        class="hidden fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 text-white px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 text-xs font-medium bg-neutral-900 animate-toast">
+        <span class="material-symbols-outlined text-tertiary-container text-lg" id="toastIcon">check_circle</span>
+        <span id="toastMessage">Operación exitosa</span>
+    </div>
+
+    <script>
+        // --- CONTROLADORES DE CARGA (TRANSICIÓN DEL SKELETON) ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const skeleton = document.getElementById('skeletonContainer');
+            const realInterface = document.getElementById('realInterfaceContainer');
+            const supportLink = document.getElementById('supportLink');
+
+            // Agregamos un retraso intencional de 1.2 segundos para simular la descarga asíncrona de recursos
+            setTimeout(() => {
+                skeleton.classList.add('opacity-0');
+
+                // Esperamos a que la animación de opacidad termine para limpiar el DOM
+                setTimeout(() => {
+                    skeleton.classList.add('hidden');
+
+                    realInterface.classList.remove('hidden');
+                    supportLink.classList.remove('hidden');
+
+                    // Activamos la animación fade-in nativa de tu hoja de estilos
+                    setTimeout(() => {
+                        realInterface.classList.remove('opacity-0');
+                        realInterface.classList.add('fade-in');
+                    }, 50);
+                }, 300);
+            }, 1200);
+        });
+
+        // --- LÓGICA DE PROCESAMIENTO EXISTENTE ---
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+        const toggleIcon = togglePassword.querySelector('.material-symbols-outlined');
+
+        const loginForm = document.getElementById('loginForm');
+        const adminLoginForm = document.getElementById('adminLoginForm');
+        const toggleAdminModeBtn = document.getElementById('toggleAdminModeBtn');
+        const backToPatientBtn = document.getElementById('backToPatientBtn');
+
+        const mainBrandTitle = document.getElementById('mainBrandTitle');
+        const mainBrandSubtitle = document.getElementById('mainBrandSubtitle');
+
+        const googleOAuthBtn = document.getElementById('googleOAuthBtn');
+        const googleModal = document.getElementById('googleModal');
+        const closeGoogleModal = document.getElementById('closeGoogleModal');
+
+        togglePassword.addEventListener('click', () => {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            toggleIcon.textContent = type === 'password' ? 'visibility' : 'visibility_off';
+        });
+
+        toggleAdminModeBtn.addEventListener('click', () => toggleAuthCards('admin'));
+        backToPatientBtn.addEventListener('click', () => toggleAuthCards('patient'));
+
+        function toggleAuthCards(target) {
+            if (target === 'admin') {
+                loginForm.classList.add('hidden');
+                toggleAdminModeBtn.classList.add('hidden');
+                adminLoginForm.classList.remove('hidden');
+
+                mainBrandTitle.innerText = "Infraestructura";
+                mainBrandSubtitle.innerText = "Consola de Administración Médica";
+                mainBrandSubtitle.classList.replace('text-secondary', 'text-primary');
+            } else {
+                adminLoginForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+                toggleAdminModeBtn.classList.remove('hidden');
+
+                mainBrandTitle.innerText = "Mediquick";
+                mainBrandSubtitle.innerText = "Healthcare Mobile Premium";
+                mainBrandSubtitle.classList.replace('text-primary', 'text-secondary');
+            }
+        }
+
+        function obtenerUsuariosDB() {
+            let usuarios = JSON.parse(localStorage.getItem('mediquick_users'));
+            if (!usuarios) {
+                usuarios = [
+                    { usuario: "paciente@mediquick.com", contrasena: "user123", rol: "usuario" },
+                    { usuario: "admin@mediquick.com", contrasena: "admin123", rol: "administrador" }
+                ];
+                localStorage.setItem('mediquick_users', JSON.stringify(usuarios));
+            }
+            return usuarios;
+        }
+
+        function ejecutarLogin(identificador, contrasena, rolEsperado, botonId, textoId, loaderId) {
+            const btn = document.getElementById(botonId);
+            const txt = document.getElementById(textoId);
+            const loader = document.getElementById(loaderId);
+
+            btn.disabled = true;
+            txt.textContent = 'Verificando credenciales...';
+            loader.classList.remove('hidden');
+            btn.classList.add('opacity-80', 'cursor-not-allowed');
+
+            setTimeout(() => {
+                localStorage.setItem('session_user', identificador || 'usuario_invitado');
+                localStorage.setItem('session_role', 'usuario');
+
+                loader.classList.add('hidden');
+                btn.classList.remove('btn-primary-gradient', 'bg-on-surface');
+                btn.classList.add('bg-tertiary-container');
+                txt.textContent = '¡Acceso Concedido!';
+
+                showToast(`Sesión iniciada: ${identificador || 'Invitado'}`, 'success');
+
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 1000);
+            }, 1600);
+        }
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const emailInput = document.getElementById('email');
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            let valido = true;
+
+            if (!emailInput.value.trim() || !emailInput.value.includes('@')) {
+                emailError.classList.remove('hidden');
+                emailInput.parentElement.classList.add('border-error', 'error-shake');
+                valido = false;
+            }
+            if (!passwordInput.value.trim()) {
+                passwordError.classList.remove('hidden');
+                passwordInput.parentElement.classList.add('border-error', 'error-shake');
+                valido = false;
+            }
+            if (valido) {
+                ejecutarLogin(emailInput.value, passwordInput.value, 'usuario', 'submitBtn', 'btnText', 'loader');
+            }
+        });
+
+        adminLoginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const adminToken = document.getElementById('adminToken');
+            const adminPassword = document.getElementById('adminPassword');
+            const adminTokenError = document.getElementById('adminTokenError');
+            const adminPasswordError = document.getElementById('adminPasswordError');
+            let valido = true;
+
+            if (!adminToken.value.trim()) {
+                adminTokenError.classList.remove('hidden');
+                adminToken.parentElement.classList.add('border-error', 'error-shake');
+                valido = false;
+            }
+            if (!adminPassword.value.trim()) {
+                adminPasswordError.classList.remove('hidden');
+                adminPassword.parentElement.classList.add('border-error', 'error-shake');
+                valido = false;
+            }
+            if (valido) {
+                ejecutarLogin(adminToken.value, adminPassword.value, 'administrador', 'adminSubmitBtn', 'adminBtnText', 'adminLoader');
+            }
+        });
+
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', () => {
+                input.parentElement.classList.remove('border-error', 'error-shake');
+                const err = document.getElementById(`${input.id}Error`);
+                if (err) err.classList.add('hidden');
+            });
+        });
+
+        googleOAuthBtn.addEventListener('click', () => {
+            googleModal.classList.remove('hidden');
+            setTimeout(() => {
+                googleModal.classList.remove('opacity-0');
+                googleModal.querySelector('.transform').classList.remove('scale-95');
+            }, 15);
+        });
+
+        closeGoogleModal.addEventListener('click', dismissGoogleModal);
+
+        function dismissGoogleModal() {
+            googleModal.querySelector('.transform').classList.add('scale-95');
+            googleModal.classList.add('opacity-0');
+            setTimeout(() => googleModal.classList.add('hidden'), 200);
+        }
+
+        document.querySelectorAll('.google-user-row').forEach(row => {
+            row.addEventListener('click', () => {
+                const email = row.getAttribute('data-email');
+                dismissGoogleModal();
+                showToast(`Conectando pasarela OAuth...`, 'info');
+                setTimeout(() => {
+                    ejecutarLogin(email, "admin123", "administrador", "adminSubmitBtn", "adminBtnText", "adminLoader");
+                }, 600);
+            });
+        });
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+
+            toastMessage.innerText = message;
+            if (type === 'error') {
+                toastIcon.innerText = 'gpp_bad';
+                toastIcon.className = 'material-symbols-outlined text-error text-lg';
+            } else if (type === 'info') {
+                toastIcon.innerText = 'sync_saved_locally';
+                toastIcon.className = 'material-symbols-outlined text-blue-400 text-lg';
+            } else {
+                toastIcon.innerText = 'verified_user';
+                toastIcon.className = 'material-symbols-outlined text-tertiary-container text-lg';
+            }
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+    </script>
+</body>
+
+</html>

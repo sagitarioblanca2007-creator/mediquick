@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <title>Mediquick - Mis Citas</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#57e15b",
+                        "on-tertiary-fixed": "#002203",
+                        "on-primary-fixed": "#3f001a",
+                        "primary-fixed-dim": "#ffb1c4",
+                        "on-secondary-fixed-variant": "#474747",
+                        "secondary-container": "#e4e2e1",
+                        "outline": "#8d7076",
+                        "on-error": "#ffffff",
+                        "on-primary-container": "#5b0028",
+                        "surface-container-highest": "#f7dce1",
+                        "on-tertiary-container": "#003306",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "primary": "#b90a5a",
+                        "error": "#ba1a1a",
+                        "surface-dim": "#eed4d8",
+                        "on-background": "#26181b",
+                        "surface-container-high": "#fde2e6",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#e4e2e1",
+                        "surface": "#fff8f8",
+                        "primary-fixed": "#ffd9e0",
+                        "on-secondary-container": "#656464",
+                        "on-primary": "#ffffff",
+                        "on-surface-variant": "#594046",
+                        "on-surface": "#26181b",
+                        "secondary": "#5f5e5e",
+                        "outline-variant": "#e1bec5",
+                        "tertiary-container": "#00a92a",
+                        "tertiary": "#006e18",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#ff4d8d",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#ffb1c4",
+                        "surface-container": "#ffe8ec",
+                        "tertiary-fixed": "#75ff75",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "inverse-surface": "#3c2c30",
+                        "inverse-on-surface": "#ffecef",
+                        "surface-bright": "#fff8f8",
+                        "surface-tint": "#b90a5a",
+                        "on-tertiary": "#ffffff",
+                        "surface-variant": "#f7dce1",
+                        "on-tertiary-fixed-variant": "#00530f",
+                        "surface-container-low": "#fff0f2",
+                        "on-primary-fixed-variant": "#8f0043",
+                        "background": "#fff8f8"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "gutter": "12px",
+                        "xs": "4px",
+                        "xl": "32px",
+                        "sm": "8px",
+                        "2xl": "48px",
+                        "container-padding": "20px",
+                        "lg": "24px",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-xl-mobile": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "body-sm": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-xl-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .active-day-shadow {
+            box-shadow: 0 4px 14px 0 rgba(255, 77, 141, 0.39);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="text-on-surface pb-24">
+    <header
+        class="w-full top-0 sticky z-50 shadow-sm bg-surface dark:bg-surface-dim flex items-center justify-between px-container-padding h-16">
+        <h1 class="font-headline-lg-mobile text-headline-lg-mobile font-bold text-primary dark:text-primary-fixed-dim">
+            Mis Citas</h1>
+        <button
+            class="active:scale-95 duration-200 hover:bg-surface-container dark:hover:bg-surface-container-highest transition-colors rounded-full p-2 flex items-center justify-center">
+            <span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim">more_vert</span>
+        </button>
+    </header>
+    <main class="max-w-xl mx-auto px-container-padding pt-md space-y-xl">
+        <section class="space-y-sm">
+            <div class="flex items-center justify-between">
+                <h2 class="font-headline-md text-headline-md text-on-surface">Septiembre 2023</h2>
+                <span class="text-label-md font-label-md text-primary uppercase tracking-widest">Hoy</span>
+            </div>
+            <div class="flex gap-md overflow-x-auto no-scrollbar py-2 -mx-container-padding px-container-padding"
+                id="day-selector">
+                <div class="flex-shrink-0 flex flex-col items-center justify-center w-14 h-20 rounded-2xl cursor-pointer transition-all duration-300 bg-surface-container-low text-on-surface-variant hover:bg-surface-container border border-transparent"
+                    onclick="selectDay(this, 'Lun')">
+                    <span class="text-label-md font-label-md">Lun</span>
+                    <span class="text-headline-md font-bold mt-1">11</span>
+                </div>
+                <div class="flex-shrink-0 flex flex-col items-center justify-center w-14 h-20 rounded-2xl cursor-pointer transition-all duration-300 bg-primary-container text-on-primary-container active-day-shadow"
+                    onclick="selectDay(this, 'Mar')">
+                    <span class="text-label-md font-label-md">Mar</span>
+                    <span class="text-headline-md font-bold mt-1">12</span>
+                </div>
+                <div class="flex-shrink-0 flex flex-col items-center justify-center w-14 h-20 rounded-2xl cursor-pointer transition-all duration-300 bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
+                    onclick="selectDay(this, 'Mié')">
+                    <span class="text-label-md font-label-md">Mié</span>
+                    <span class="text-headline-md font-bold mt-1">13</span>
+                </div>
+                <div class="flex-shrink-0 flex flex-col items-center justify-center w-14 h-20 rounded-2xl cursor-pointer transition-all duration-300 bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
+                    onclick="selectDay(this, 'Jue')">
+                    <span class="text-label-md font-label-md">Jue</span>
+                    <span class="text-headline-md font-bold mt-1">14</span>
+                </div>
+                <div class="flex-shrink-0 flex flex-col items-center justify-center w-14 h-20 rounded-2xl cursor-pointer transition-all duration-300 bg-surface-container-low text-on-surface-variant hover:bg-surface-container"
+                    onclick="selectDay(this, 'Vie')">
+                    <span class="text-label-md font-label-md">Vie</span>
+                    <span class="text-headline-md font-bold mt-1">15</span>
+                </div>
+            </div>
+        </section>
+        <section class="space-y-md min-h-[300px]" id="appointment-container">
+            <h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-2">Próximas Citas
+            </h3>
+            <div
+                class="animate-fade-in appointment-card bg-surface border border-outline-variant/30 rounded-xl p-md shadow-[0_4px_20px_0_rgba(0,0,0,0.04)] relative overflow-hidden flex items-center gap-md">
+                <div class="w-1 absolute left-0 top-0 bottom-0 bg-primary"></div>
+                <div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container-highest flex-shrink-0">
+                    <img alt="Doctor profile" class="w-full h-full object-cover"
+                        data-alt="A professional medical headshot of a friendly middle-aged male doctor with glasses and a white coat. He is smiling warmly in a bright, modern clinic setting with soft ambient lighting. The background features a blurred medical environment, reinforcing a premium healthcare aesthetic."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuC9IDEf8rlBPL8fPt2ux6-cbmTzLMZg1GKslQWUPtsuBeK5MKv_bTW1V6MrInCNWiJ9Um82Cnu9xYu1w9m_76WtcL28UCP8utzWZec5O9QQUfCznt_kOTGV6GWoSrCHS0pJtDf-QcpgGPdPdRgrVWevPbLqynSlTTo70KnfXM4Dj31e7Bz3uQ9oI7OH7Rqw9tj9U4CwykcOUzLiXD1dWhgdshCyg4MLPzBNsFW-xDQWXSquZSio8h515zS0VXeHx9Dq3iw-KQlFmXQ" />
+                </div>
+                <div class="flex-1 space-y-1">
+                    <div class="flex justify-between items-start">
+                        <h4 class="font-headline-md text-headline-md text-on-surface">Dr. Alejandro Ruiz</h4>
+                        <span
+                            class="bg-tertiary-container/20 text-on-tertiary-fixed-variant px-2 py-0.5 rounded-full text-label-md font-label-md">Confirmada</span>
+                    </div>
+                    <p class="text-body-sm font-body-sm text-on-surface-variant flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]">stethoscope</span> Cardiología
+                    </p>
+                    <p class="text-body-md font-bold text-primary flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[18px]">schedule</span> 10:30 AM
+                    </p>
+                </div>
+            </div>
+            <div class="animate-fade-in appointment-card bg-surface border border-outline-variant/30 rounded-xl p-md shadow-[0_4px_20px_0_rgba(0,0,0,0.04)] relative overflow-hidden flex items-center gap-md"
+                style="animation-delay: 0.1s;">
+                <div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container-highest flex-shrink-0">
+                    <img alt="Doctor profile" class="w-full h-full object-cover"
+                        data-alt="A professional headshot of a female doctor in her 30s with dark hair tied back, wearing a white lab coat and a stethoscope around her neck. The lighting is clean and bright, characteristic of a high-end medical clinic. The mood is confident and empathetic, matching a premium healthcare brand."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlX_RiFTXTLNF1cgXizo-FUllg9GzQPe98YTecO2HvUwt1SCUjaxVp31gD-ZBenQnPXKYsDCyAtK6D4xceabZbBgduptY5AvupURVenNhBd5KsQ9cvsf4MMkXC_B4v88k49LVxK46FQ4zG17SfxWpqOyiVRAG6OiUkVH5zX8TPDsTCIzZvwadga-zgSeFMQxjZHSsqmgNDkOk2QpJ6WhyiDpXRDPJ8axp1ZMQF8M8Fd506VjaSslnI9TlLfOOZzoTuX-KLW10brFU" />
+                </div>
+                <div class="flex-1 space-y-1">
+                    <div class="flex justify-between items-start">
+                        <h4 class="font-headline-md text-headline-md text-on-surface">Dra. Elena Santos</h4>
+                        <span
+                            class="bg-secondary-container/50 text-on-secondary-container px-2 py-0.5 rounded-full text-label-md font-label-md">Pendiente</span>
+                    </div>
+                    <p class="text-body-sm font-body-sm text-on-surface-variant flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[16px]">psychology</span> Neurología
+                    </p>
+                    <p class="text-body-md font-bold text-primary flex items-center gap-1">
+                        <span class="material-symbols-outlined text-[18px]">schedule</span> 04:15 PM
+                    </p>
+                </div>
+            </div>
+        </section>
+        <section class="hidden flex-col items-center justify-center text-center py-xl space-y-md animate-fade-in"
+            id="empty-state">
+            <div class="w-32 h-32 bg-surface-container-low rounded-full flex items-center justify-center">
+                <span class="material-symbols-outlined text-[64px] text-outline-variant">event_busy</span>
+            </div>
+            <div>
+                <h3 class="font-headline-md text-headline-md text-on-surface">No tienes citas para este día</h3>
+                <p class="text-body-md text-on-surface-variant max-w-[240px] mx-auto">Parece que tu agenda está libre.
+                    ¿Necesitas agendar algo?</p>
+            </div>
+            <button
+                class="bg-primary-container hover:bg-primary-container/90 text-on-primary-container px-lg py-md rounded-full font-headline-md active:scale-95 transition-all shadow-md"
+                onclick="scrollToForm()">
+                Agendar nueva cita
+            </button>
+        </section>
+        <section
+            class="bg-surface-container-lowest border border-outline-variant/30 rounded-3xl p-lg shadow-sm space-y-lg"
+            id="appointment-form">
+            <div class="flex items-center gap-md">
+                <div class="p-2 bg-primary/10 rounded-xl">
+                    <span class="material-symbols-outlined text-primary">add_circle</span>
+                </div>
+                <h3 class="font-headline-md text-headline-md text-on-surface">Agendar Nueva Cita</h3>
+            </div>
+            <form class="space-y-md" id="new-appointment-form" onsubmit="handleFormSubmit(event)">
+                <div class="space-y-xs">
+                    <label class="text-label-md font-label-md text-on-surface-variant ml-1">Especialista</label>
+                    <select
+                        class="w-full bg-surface border-outline-variant/50 border-2 rounded-2xl py-3 px-md focus:border-primary focus:ring-0 transition-all outline-none appearance-none font-body-md text-on-surface"
+                        id="form-doctor" required="">
+                        <option disabled="" selected="" value="">Selecciona un doctor</option>
+                        <option value="Dr. Alejandro Ruiz - Cardiología">Dr. Alejandro Ruiz - Cardiología</option>
+                        <option value="Dra. Elena Santos - Neurología">Dra. Elena Santos - Neurología</option>
+                        <option value="Dra. Lucia Méndez - Pediatría">Dra. Lucia Méndez - Pediatría</option>
+                        <option value="Dr. Roberto Gomez - Dermatología">Dr. Roberto Gomez - Dermatología</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-md">
+                    <div class="space-y-xs">
+                        <label class="text-label-md font-label-md text-on-surface-variant ml-1">Hora</label>
+                        <input
+                            class="w-full bg-surface border-outline-variant/50 border-2 rounded-2xl py-3 px-md focus:border-primary focus:ring-0 transition-all outline-none font-body-md text-on-surface"
+                            id="form-time" required="" type="time" />
+                    </div>
+                    <div class="space-y-xs">
+                        <label class="text-label-md font-label-md text-on-surface-variant ml-1">Estado</label>
+                        <select
+                            class="w-full bg-surface border-outline-variant/50 border-2 rounded-2xl py-3 px-md focus:border-primary focus:ring-0 transition-all outline-none appearance-none font-body-md text-on-surface"
+                            id="form-status">
+                            <option value="Confirmada">Confirmada</option>
+                            <option value="Pendiente">Pendiente</option>
+                        </select>
+                    </div>
+                </div>
+                <button
+                    class="w-full bg-primary-container text-on-primary-container py-md rounded-2xl font-headline-md active:scale-95 hover:shadow-lg transition-all flex items-center justify-center gap-2"
+                    id="submit-btn" type="submit">
+                    <span id="btn-text">Guardar cita</span>
+                    <span class="hidden animate-spin material-symbols-outlined" id="btn-loader">sync</span>
+                </button>
+            </form>
+        </section>
+    </main>
+    <nav
+        class="fixed bottom-0 left-0 right-0 bg-[#fff8f8] border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.03)] flex justify-around items-center py-2 z-50 pb-[calc(8px+env(safe-area-inset-bottom,0px))]">
+        <a href="home.html"
+            class="flex flex-col items-center flex-1 text-center text-xs font-medium text-gray-500 hover:text-[#b90a5a] transition-colors">
+            <span class="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_0,'wght'_400]">home</span>
+            <span class="mt-0.5">Inicio</span>
+        </a>
+        <a href="citas.html" class="flex flex-col items-center flex-1 text-center text-xs font-semibold text-[#b90a5a]">
+            <span
+                class="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_1,'wght'_500]">calendar_month</span>
+            <span class="mt-0.5">Citas</span>
+        </a>
+        <a href="chatbot.html"
+            class="flex flex-col items-center flex-1 text-center text-xs font-medium text-gray-500 hover:text-[#b90a5a] transition-colors">
+            <span
+                class="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_0,'wght'_400]">smart_toy</span>
+            <span class="mt-0.5">IA médica</span>
+        </a>
+        <a href="perfil.html"
+            class="flex flex-col items-center flex-1 text-center text-xs font-medium text-gray-500 hover:text-[#b90a5a] transition-colors">
+            <span class="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_0,'wght'_400]">person</span>
+            <span class="mt-0.5">Perfil</span>
+        </a>
+    </nav>
+    <script>
+        function selectDay(element, day) {
+            // Remove active classes from all
+            const days = document.querySelectorAll('#day-selector > div');
+            days.forEach(d => {
+                d.className = "flex-shrink-0 flex flex-col items-center justify-center w-14 h-20 rounded-2xl cursor-pointer transition-all duration-300 bg-surface-container-low text-on-surface-variant hover:bg-surface-container";
+            });
+
+            // Add active class to selected
+            element.className = "flex-shrink-0 flex flex-col items-center justify-center w-14 h-20 rounded-2xl cursor-pointer transition-all duration-300 bg-primary-container text-on-primary-container active-day-shadow";
+
+            // Simulated Filter logic
+            const container = document.getElementById('appointment-container');
+            const emptyState = document.getElementById('empty-state');
+
+            // Logic: "Lun" shows empty, others show list
+            if (day === 'Lun' || day === 'Vie') {
+                container.classList.add('hidden');
+                emptyState.classList.remove('hidden');
+            } else {
+                container.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+            }
+        }
+
+        function scrollToForm() {
+            document.getElementById('appointment-form').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            const btn = document.getElementById('submit-btn');
+            const btnText = document.getElementById('btn-text');
+            const btnLoader = document.getElementById('btn-loader');
+
+            // UI State change
+            btn.disabled = true;
+            btnText.innerText = 'Guardando...';
+            btnLoader.classList.remove('hidden');
+            btn.classList.add('opacity-80');
+
+            // Get form values
+            const doctorInfo = document.getElementById('form-doctor').value;
+            const time = document.getElementById('form-time').value;
+            const status = document.getElementById('form-status').value;
+            const [doctorName, specialty] = doctorInfo.split(' - ');
+
+            // Simulate Network delay
+            setTimeout(() => {
+                // Add new card logic
+                const container = document.getElementById('appointment-container');
+                const emptyState = document.getElementById('empty-state');
+
+                const newCard = document.createElement('div');
+                newCard.className = "animate-fade-in appointment-card bg-surface border border-outline-variant/30 rounded-xl p-md shadow-[0_4px_20px_0_rgba(0,0,0,0.04)] relative overflow-hidden flex items-center gap-md";
+
+                const statusColorClass = status === 'Confirmada' ? 'bg-tertiary-container/20 text-on-tertiary-fixed-variant' : 'bg-secondary-container/50 text-on-secondary-container';
+
+                newCard.innerHTML = `
+                    <div class="w-12 h-12 rounded-full overflow-hidden bg-surface-container-highest flex-shrink-0">
+                        <div class="w-full h-full bg-primary/20 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary">person</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 space-y-1">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-headline-md text-headline-md text-on-surface">${doctorName}</h4>
+                            <span class="${statusColorClass} px-2 py-0.5 rounded-full text-label-md font-label-md">${status}</span>
+                        </div>
+                        <p class="text-body-sm font-body-sm text-on-surface-variant flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[16px]">stethoscope</span> ${specialty}
+                        </p>
+                        <p class="text-body-md font-bold text-primary flex items-center gap-1">
+                            <span class="material-symbols-outlined text-[18px]">schedule</span> ${convertTo12Hour(time)}
+                        </p>
+                    </div>
+                `;
+
+                container.prepend(newCard);
+                container.classList.remove('hidden');
+                emptyState.classList.add('hidden');
+
+                // Reset button
+                btn.disabled = false;
+                btnText.innerText = 'Cita guardada!';
+                btnLoader.classList.add('hidden');
+                btn.classList.replace('bg-primary-container', 'bg-tertiary-container');
+                btn.classList.remove('opacity-80');
+
+                // Clear form
+                event.target.reset();
+
+                setTimeout(() => {
+                    btnText.innerText = 'Guardar cita';
+                    btn.classList.replace('bg-tertiary-container', 'bg-primary-container');
+                }, 2000);
+
+            }, 1200);
+        }
+
+        function convertTo12Hour(time) {
+            const [hours, minutes] = time.split(':');
+            const h = parseInt(hours);
+            const ampm = h >= 12 ? 'PM' : 'AM';
+            const h12 = h % 12 || 12;
+            return `${h12}:${minutes} ${ampm}`;
+        }
+    </script>
+</body>
+
+</html>

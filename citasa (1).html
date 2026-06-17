@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mediquick Admin - Gestión de Citas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#ffffff",
+                    "surface-tint": "#b4136d",
+                    "on-surface-variant": "#574048",
+                    "primary-fixed": "#ffd9e4",
+                    "tertiary-fixed": "#e2e2e2",
+                    "surface-variant": "#d3e4fe",
+                    "surface-container-lowest": "#ffffff",
+                    "primary-fixed-dim": "#ffb0cd",
+                    "on-secondary-container": "#686066",
+                    "surface-container-high": "#dce9ff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "secondary": "#635c61",
+                    "on-primary-container": "#fffbff",
+                    "on-surface": "#0b1c30",
+                    "on-secondary": "#ffffff",
+                    "inverse-primary": "#ffb0cd",
+                    "secondary-fixed-dim": "#cec4ca",
+                    "on-tertiary-fixed": "#1a1c1c",
+                    "on-tertiary-container": "#fcfcfc",
+                    "on-secondary-fixed": "#1f1a1e",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#3e0022",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-container-highest": "#d3e4fe",
+                    "surface-bright": "#f8f9ff",
+                    "tertiary-fixed-dim": "#c6c6c7",
+                    "outline-variant": "#debec8",
+                    "surface-container": "#e5eeff",
+                    "tertiary": "#5a5c5c",
+                    "surface": "#f8f9ff",
+                    "primary-container": "#d23284",
+                    "on-secondary-fixed-variant": "#4b454a",
+                    "primary": "#b10e6b",
+                    "surface-dim": "#cbdbf5",
+                    "on-tertiary-fixed-variant": "#454747",
+                    "surface-container-low": "#eff4ff",
+                    "tertiary-container": "#737575",
+                    "secondary-container": "#e7dde3",
+                    "background": "#f8f9ff",
+                    "on-error-container": "#93000a",
+                    "on-background": "#0b1c30",
+                    "secondary-fixed": "#eae0e6",
+                    "outline": "#8b7079",
+                    "inverse-surface": "#213145",
+                    "on-primary-fixed-variant": "#8c0053",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-padding-mb": "16px",
+                    "container-padding-dt": "32px",
+                    "sidebar-width": "260px",
+                    "unit": "8px",
+                    "gutter": "24px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "headline-lg-mobile": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background: linear-gradient(135deg, #f8f9ff 0%, #ffd9e4 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .date-chip-active {
+            background: #b10e6b !important;
+            color: white !important;
+            box-shadow: 0 4px 12px rgba(177, 14, 107, 0.2);
+        }
+        .date-chip-active span {
+            color: white !important;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .modal-active {
+            display: flex !important;
+        }
+        .toast {
+            animation: slideUp 0.3s ease-out forwards, fadeOut 0.3s ease-in 2s forwards;
+        }
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100%); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        #dateInput::-webkit-calendar-picker-indicator {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            cursor: pointer;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="text-on-surface antialiased pb-24">
+<!-- TopAppBar -->
+<header class="w-full sticky top-0 z-40 bg-surface/60 backdrop-blur-md shadow-sm border-b border-white/40 flex items-center justify-between px-container-padding-mb h-20">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary text-3xl">clinical_notes</span>
+<h1 class="font-headline-md text-headline-md text-on-surface">Gestión de Citas</h1>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary/20 overflow-hidden cursor-pointer active:scale-95 transition-transform">
+<img alt="Dr. Smith" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzYU43oyzCjt79UMFXurdJcGzCKc6mh38ao6ITJ3i0vW1-EmZCPcxKY5ViA30rXEIU5yHJPrdPWrksS35lLpReDjxyEu2i5ohgqMOu9eIT55Fkado55-VCougVf8R12V7pskft3QINjYKA4Gvx6f5YKgiw7vZjPKnRk64jMq4D9QCM883gGvAkRyb62uKkAKZJOUmhEnPu6eRXJsqv6U-DyrDV5gDU0dyITjWBtWQ1lsxpCMlyTfyn-tEbpYv6RCSpmDO-5fdinqzA"/>
+</div>
+</header>
+<main class="px-container-padding-mb mt-6 space-y-6">
+<!-- Date Picker Section -->
+<section class="space-y-3">
+<div class="flex justify-between items-center">
+<h2 class="font-headline-md text-headline-md text-on-surface" id="currentMonthYear">Octubre 2023</h2>
+<div class="relative w-8 h-8 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary cursor-pointer">calendar_month</span>
+<input class="absolute inset-0 opacity-0 cursor-pointer" id="dateInput" onchange="handleDatePicker(this)" type="date"/>
+</div>
+</div>
+<div class="flex gap-3 overflow-x-auto scrollbar-hide py-2" id="dateBar">
+<!-- Dynamically populated -->
+</div>
+</section>
+<!-- Search Bar -->
+<section>
+<div class="relative glass-card rounded-full px-4 h-12 flex items-center gap-3">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 w-full text-body-md font-body-md placeholder-on-surface-variant/60" id="patientSearch" onkeyup="filterAppointments()" placeholder="Buscar paciente por nombre..." type="text"/>
+</div>
+</section>
+<!-- Appointment List -->
+<section class="space-y-4">
+<h3 class="font-headline-md text-headline-md text-on-surface-variant" id="appointmentListTitle">Citas para hoy</h3>
+<div class="space-y-4" id="appointmentsContainer">
+<!-- Dynamically populated -->
+</div>
+</section>
+</main>
+<!-- Patient History Modal -->
+<div class="fixed inset-0 z-[60] bg-on-background/40 backdrop-blur-sm hidden items-center justify-center p-6" id="historyModal">
+<div class="glass-card bg-white/95 rounded-3xl w-full max-w-md p-6 space-y-6 shadow-2xl">
+<div class="flex justify-between items-center border-b border-outline-variant/30 pb-4">
+<h3 class="text-headline-md font-headline-md text-on-surface">Historial de Paciente</h3>
+<button class="material-symbols-outlined text-outline" onclick="closeModal()">close</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4">
+<div class="w-16 h-16 rounded-full bg-primary-fixed/30 flex items-center justify-center text-primary overflow-hidden">
+<img alt="Patient" class="w-full h-full object-cover hidden" id="modalPatientImg" src=""/>
+<span class="material-symbols-outlined text-3xl" id="modalPatientIcon">person</span>
+</div>
+<div>
+<p class="text-headline-md font-bold" id="modalPatientName">Cargando...</p>
+<p class="text-label-sm text-on-surface-variant">ID: #4432-B</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="p-3 bg-surface-container-low rounded-xl">
+<p class="text-label-sm text-on-surface-variant uppercase">Última Visita</p>
+<p class="text-body-md font-semibold">12 Sep 2023</p>
+</div>
+<div class="p-3 bg-surface-container-low rounded-xl">
+<p class="text-label-sm text-on-surface-variant uppercase">Alergias</p>
+<p class="text-body-md font-semibold text-error">Ninguna</p>
+</div>
+</div>
+<div class="space-y-2">
+<p class="text-label-sm text-on-surface-variant uppercase">Notas Médicas</p>
+<p class="text-body-md text-on-surface italic bg-white/50 p-3 rounded-xl border border-outline-variant/20">Paciente muestra mejoría en el tratamiento de presión arterial. Mantener dosis actual.</p>
+</div>
+</div>
+<button class="w-full py-3 bg-primary text-white rounded-xl font-bold" onclick="closeModal()">Cerrar</button>
+</div>
+</div>
+<!-- Success Toast -->
+<div class="fixed bottom-24 left-1/2 -translate-x-1/2 z-[70] hidden" id="successToast">
+<div class="toast bg-green-600 text-white px-6 py-3 rounded-full flex items-center gap-2 shadow-lg">
+<span class="material-symbols-outlined">check_circle</span>
+<span class="font-semibold" id="toastMessage">Operación realizada con éxito</span>
+</div>
+</div>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full md:hidden rounded-t-xl z-50 bg-white/80 backdrop-blur-lg border-t border-white/40 shadow-lg flex justify-around items-center h-16 px-4"><a class="flex flex-col items-center text-on-surface-variant p-2 active:bg-primary-fixed/50 transition-colors" href="#" onclick="setActiveNav(this)"><span class="material-symbols-outlined">home</span><span class="font-label-sm text-label-sm">Inicio</span></a><a class="flex flex-col items-center text-on-surface-variant p-2 active:bg-primary-fixed/50 transition-colors" href="#" onclick="setActiveNav(this)"><span class="material-symbols-outlined">bar_chart</span><span class="font-label-sm text-label-sm">Gráficos</span></a><a class="flex flex-col items-center text-primary bg-primary-fixed/30 rounded-xl p-2 transition-all" href="#" onclick="setActiveNav(this)"><span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event_note</span><span class="font-label-sm text-label-sm">Citas</span></a><a class="flex flex-col items-center text-on-surface-variant p-2 active:bg-primary-fixed/50 transition-colors" href="#" onclick="setActiveNav(this)"><span class="material-symbols-outlined">person</span><span class="font-label-sm text-label-sm">Perfil</span></a></nav>
+<script>
+    const mockPatients = [
+        { name: "Elena Garcia", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuD5oyB-FmOwvMFfBZwds1kwMA1TTBDmSL6E-gqASJYmB0oIgsMXt8Hty8yFzsHS4RQsypoFbS91Y8NXgJoKwwdrCkiY_k4Qf02CU64I79HyPRW4qBVR0AJn3BA_74SntbQ5z3yUU2BKYUHXplkX0ohRyKYNTWHfO9nIbQmZ_HByyQpJBPcn8qaYlAS4flLlR1gaX_psH9CgqwmsqokAoRRIPBX-AVdejHN7OdQj2DFUq0Vp_zNUcRtLNrwNgoADawwKdVCIByhoGJhm" },
+        { name: "Ricardo Torres", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuAi1wE-nUFS_4vFUUxyZn-u7KFlU2Q0kO-nO_bTklm-XYF8Zq3o5BQ9XHv4a15DmG6rQO2WAK-BhitXKzD5UmBFERRsRgBfbpnujkXTjw15wmUAJawFxLI5pOB9WEG6vq9oekPiFA5QbEsugd7sFUahqWMqHlipt7Bd4r-4RMphvSesobuaU5LVWsrf5Edn6WFHkoMYfR3Uu2I_2mensXAtrlCpmzlhGxeR2BMJdQemVshBu9tS2sJP8jFnfE5h_ywMFyXPFE8EH906" },
+        { name: "Sofia Mendez", img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCQwSBizFJrDA7OQW9C-jj3ERp1iyf8Dm1JGIiP_kd3fRtgkoK4W3SEqPoh3AcXgl6zYEyVdF6cUlYH2lt5txblIE75xB22aEyQa-GPsknVahz5a2H9wzUr62PDVCAFBBR-8DdOaAb1ANHusrm61m0uEZZq-jp4wznLGuUtH1Pknm6fQJ4UcUJrsWk87PgTfJcox2yKLHK_bxQZRXBCTdlnTsPT3s-SiGXMJ-WDdYzWdvPqkJJLeOJfqisE8GK-n6crio2VB5PlQrRp" },
+        { name: "Carlos Ruiz", img: "https://i.pravatar.cc/150?u=carlos" },
+        { name: "Ana Martínez", img: "https://i.pravatar.cc/150?u=ana" },
+        { name: "Julian López", img: "https://i.pravatar.cc/150?u=julian" },
+        { name: "Marta Sánchez", img: "https://i.pravatar.cc/150?u=marta" }
+    ];
+
+    const procedures = ["Consulta General", "Seguimiento Post-Operatorio", "Revisión de Resultados", "Extracción de Sangre", "Vacunación", "Control de Presión"];
+    const timesPool = ["09:00 AM", "10:30 AM", "11:15 AM", "12:45 PM", "02:00 PM", "03:30 PM", "04:30 PM"];
+
+    let selectedDate = new Date();
+    let appointmentsByDate = {}; 
+
+    function formatDate(date) {
+        const d = new Date(date);
+        let month = '' + (d.getMonth() + 1);
+        let day = '' + d.getDate();
+        let year = d.getFullYear();
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+        return [year, month, day].join('-');
+    }
+
+    function generateMockAppointments(dateStr) {
+        if (appointmentsByDate[dateStr]) return appointmentsByDate[dateStr];
+        
+        let seed = 0;
+        for (let i = 0; i < dateStr.length; i++) seed += dateStr.charCodeAt(i);
+        
+        const count = (seed % 2) + 2; 
+        const dayAppointments = [];
+        const shuffledPatients = [...mockPatients].sort(() => 0.5 - ((seed % 10) / 10));
+        
+        for (let i = 0; i < count; i++) {
+            const patient = shuffledPatients[i % shuffledPatients.length];
+            const proc = procedures[(seed + i) % procedures.length];
+            const time = timesPool[(seed + i) % timesPool.length];
+            // Initializing with "Pendiente" to support the "Aceptar Cita" primary action requirement
+            const status = "Pendiente"; 
+
+            dayAppointments.push({
+                id: `apt-${dateStr}-${i}`,
+                patient: patient,
+                time: time,
+                status: status,
+                procedure: proc
+            });
+        }
+        appointmentsByDate[dateStr] = dayAppointments;
+        return dayAppointments;
+    }
+
+    function renderDateBar() {
+        const dateBar = document.getElementById('dateBar');
+        dateBar.innerHTML = '';
+        
+        const start = new Date(selectedDate);
+        const dayOfWeek = start.getDay();
+        const diff = start.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+        start.setDate(diff);
+
+        const daysLabels = ["LUN", "MAR", "MIE", "JUE", "VIE", "SAB", "DOM"];
+        
+        for (let i = 0; i < 7; i++) {
+            const current = new Date(start);
+            current.setDate(start.getDate() + i);
+            const dateStr = formatDate(current);
+            const isSelected = dateStr === formatDate(selectedDate);
+            
+            const chip = document.createElement('div');
+            chip.className = `flex-shrink-0 w-14 h-20 rounded-xl flex flex-col items-center justify-center cursor-pointer transition-all ${isSelected ? 'date-chip-active' : 'glass-card'}`;
+            chip.onclick = () => selectDate(current);
+            
+            chip.innerHTML = `
+                <span class="text-label-sm font-label-sm ${isSelected ? 'text-white' : 'text-on-surface-variant'}">${daysLabels[i]}</span>
+                <span class="text-headline-md font-bold ${isSelected ? 'text-white' : 'text-on-surface'}">${current.getDate()}</span>
+            `;
+            dateBar.appendChild(chip);
+        }
+
+        const options = { month: 'long', year: 'numeric' };
+        const monthYearText = selectedDate.toLocaleDateString('es-ES', options);
+        document.getElementById('currentMonthYear').textContent = monthYearText.charAt(0).toUpperCase() + monthYearText.slice(1);
+    }
+
+    function renderAppointments() {
+        const container = document.getElementById('appointmentsContainer');
+        const dateStr = formatDate(selectedDate);
+        const appointments = generateMockAppointments(dateStr);
+        const search = document.getElementById('patientSearch').value.toLowerCase();
+        
+        container.innerHTML = '';
+        
+        const filtered = appointments.filter(a => a.patient.name.toLowerCase().includes(search));
+
+        if (filtered.length === 0) {
+            container.innerHTML = `
+                <div class="p-12 text-center flex flex-col items-center gap-2 opacity-50">
+                    <span class="material-symbols-outlined text-4xl">event_busy</span>
+                    <p class="text-body-md">No hay citas para este día</p>
+                </div>`;
+            return;
+        }
+
+        filtered.forEach(apt => {
+            const isPending = apt.status === 'Pendiente';
+            const isConfirmed = apt.status === 'Confirmada';
+            const isCompleted = apt.status === 'Completada';
+            
+            const card = document.createElement('div');
+            card.id = apt.id;
+            card.className = `glass-card rounded-2xl p-4 space-y-4 transition-all duration-300`;
+            
+            let statusColor = 'bg-yellow-100 text-yellow-700';
+            if (isConfirmed) statusColor = 'bg-green-100 text-green-700';
+            if (isCompleted) statusColor = 'bg-blue-100 text-blue-700';
+
+            const actionButtonLabel = isPending ? 'Aceptar Cita' : 'Iniciar Consulta';
+            const actionFunction = isPending ? `handleAceptarCita('${apt.id}')` : `startConsultation('${apt.patient.name}')`;
+
+            card.innerHTML = `
+                <div class="flex items-start justify-between">
+                    <div class="flex gap-4">
+                        <div class="w-14 h-14 rounded-xl overflow-hidden border border-primary/10">
+                            <img alt="${apt.patient.name}" class="w-full h-full object-cover" src="${apt.patient.img}"/>
+                        </div>
+                        <div>
+                            <h4 class="font-headline-md text-on-surface">${apt.patient.name}</h4>
+                            <div class="flex items-center gap-1 text-primary">
+                                <span class="material-symbols-outlined text-[18px]">schedule</span>
+                                <span class="text-body-md font-semibold">${apt.time}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <span id="badge-${apt.id}" class="status-badge px-3 py-1 rounded-full text-label-sm font-label-sm transition-colors ${statusColor}">${apt.status}</span>
+                </div>
+                <div class="space-y-3">
+                    <p class="text-body-md text-on-surface-variant font-medium">${apt.procedure}</p>
+                    <div class="flex gap-2">
+                        <button class="flex-1 py-2.5 rounded-xl border border-primary/20 text-primary font-label-sm text-label-sm hover:bg-primary/5 active:scale-95 transition-all" onclick="showHistory('${apt.patient.name}', '${apt.patient.img}')">
+                            Ver Historial
+                        </button>
+                        <button class="flex-1 py-2.5 rounded-xl bg-primary text-white font-label-sm text-label-sm hover:brightness-110 active:scale-95 transition-all" id="btn-${apt.id}" onclick="${actionFunction}">
+                            ${actionButtonLabel}
+                        </button>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        const todayStr = formatDate(new Date());
+        const titleElement = document.getElementById('appointmentListTitle');
+        if (dateStr === todayStr) {
+            titleElement.textContent = 'Citas para hoy';
+        } else {
+            titleElement.textContent = `Citas del ${selectedDate.getDate()} de ${selectedDate.toLocaleDateString('es-ES', {month: 'long'})}`;
+        }
+    }
+
+    function handleAceptarCita(id) {
+        const dateStr = formatDate(selectedDate);
+        const apts = appointmentsByDate[dateStr];
+        const apt = apts.find(a => a.id === id);
+        
+        if (apt) {
+            // Update internal state
+            apt.status = 'Confirmada';
+            
+            // UI Update: Status Badge
+            const badge = document.getElementById(`badge-${id}`);
+            if (badge) {
+                badge.textContent = 'Confirmada';
+                badge.classList.remove('bg-yellow-100', 'text-yellow-700');
+                badge.classList.add('bg-green-100', 'text-green-700');
+            }
+
+            // UI Update: Button transformation
+            const btn = document.getElementById(`btn-${id}`);
+            if (btn) {
+                btn.textContent = 'Iniciar Consulta';
+                btn.onclick = () => startConsultation(apt.patient.name);
+            }
+
+            showToast('Cita confirmada con éxito');
+        }
+    }
+
+    function selectDate(date) {
+        selectedDate = new Date(date);
+        renderDateBar();
+        renderAppointments();
+    }
+
+    function handleDatePicker(input) {
+        if (input.value) {
+            const dateParts = input.value.split('-');
+            const localDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+            selectDate(localDate);
+        }
+    }
+
+    function filterAppointments() {
+        renderAppointments();
+    }
+
+    function showHistory(name, img) {
+        document.getElementById('modalPatientName').textContent = name;
+        const modalImg = document.getElementById('modalPatientImg');
+        const modalIcon = document.getElementById('modalPatientIcon');
+        if (img) {
+            modalImg.src = img;
+            modalImg.classList.remove('hidden');
+            modalIcon.classList.add('hidden');
+        } else {
+            modalImg.classList.add('hidden');
+            modalIcon.classList.remove('hidden');
+        }
+        document.getElementById('historyModal').classList.add('modal-active');
+    }
+
+    function closeModal() {
+        document.getElementById('historyModal').classList.remove('modal-active');
+    }
+
+    function startConsultation(name) {
+        showToast(`Iniciando consulta con ${name}...`);
+    }
+
+    function showToast(msg) {
+        const toast = document.getElementById('successToast');
+        document.getElementById('toastMessage').textContent = msg;
+        toast.classList.remove('hidden');
+        setTimeout(() => {
+            toast.classList.add('hidden');
+        }, 2500);
+    }
+
+    function setActiveNav(element) {
+        const navItems = document.querySelectorAll('nav a');
+        navItems.forEach(i => {
+            i.classList.remove('text-primary', 'bg-primary-fixed/30', 'rounded-xl');
+            i.classList.add('text-on-surface-variant');
+            const span = i.querySelector('.material-symbols-outlined');
+            if(span) span.style.fontVariationSettings = "'FILL' 0";
+        });
+        element.classList.add('text-primary', 'bg-primary-fixed/30', 'rounded-xl');
+        element.classList.remove('text-on-surface-variant');
+        const activeSpan = element.querySelector('.material-symbols-outlined');
+        if(activeSpan) activeSpan.style.fontVariationSettings = "'FILL' 1";
+    }
+
+    window.onload = () => {
+        renderDateBar();
+        renderAppointments();
+    };
+
+    window.onclick = function(event) {
+        const modal = document.getElementById('historyModal');
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+</script>
+</body></html>

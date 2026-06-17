@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <title>Mediquick - Mi Perfil</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-ring {
+            background: linear-gradient(135deg, #ff4d8d 0%, #b90a5a 100%);
+        }
+
+        .animate-toast {
+            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100px) translateX(-50%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0) translateX(-50%);
+                opacity: 1;
+            }
+        }
+    </style>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#fff8f8",
+                        "surface-container-high": "#fde2e6",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#474747",
+                        "on-tertiary-fixed": "#002203",
+                        "tertiary-container": "#00a92a",
+                        "outline-variant": "#e1bec5",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#ffb1c4",
+                        "surface-dim": "#eed4d8",
+                        "primary-container": "#ff4d8d",
+                        "surface-tint": "#b90a5a",
+                        "tertiary-fixed": "#75ff75",
+                        "error": "#ba1a1a",
+                        "on-primary-container": "#5b0028",
+                        "on-primary-fixed": "#3f001a",
+                        "secondary-fixed": "#e4e2e1",
+                        "secondary-container": "#e4e2e1",
+                        "surface-bright": "#fff8f8",
+                        "on-secondary-container": "#656464",
+                        "surface-container": "#ffe8ec",
+                        "inverse-surface": "#3c2c30",
+                        "surface-container-low": "#fff0f2",
+                        "primary": "#b90a5a",
+                        "secondary": "#5f5e5e",
+                        "on-secondary-fixed": "#1b1c1c",
+                        "on-background": "#26181b",
+                        "on-primary-fixed-variant": "#8f0043",
+                        "on-surface-variant": "#594046",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-fixed": "#ffd9e0",
+                        "secondary-fixed-dim": "#c8c6c5",
+                        "outline": "#8d7076",
+                        "primary-fixed-dim": "#ffb1c4",
+                        "on-surface": "#26181b",
+                        "tertiary-fixed-dim": "#57e15b",
+                        "tertiary": "#006e18",
+                        "on-tertiary-fixed-variant": "#00530f",
+                        "on-primary": "#ffffff",
+                        "inverse-on-surface": "#ffecef",
+                        "background": "#fff8f8",
+                        "surface-variant": "#f7dce1",
+                        "on-error-container": "#93000a",
+                        "on-tertiary-container": "#003306",
+                        "on-error": "#ffffff",
+                        "surface-container-highest": "#f7dce1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "8px",
+                        "xl": "12px",
+                        "2xl": "24px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sm": "8px",
+                        "xs": "4px",
+                        "gutter": "12px",
+                        "xl": "32px",
+                        "container-padding": "20px",
+                        "base": "4px",
+                        "md": "16px",
+                        "2xl": "48px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-xl": ["Plus Jakarta Sans"],
+                        "body-sm": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "headline-xl-mobile": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+                        "headline-xl-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "headline-md-mobile": ["20px", { "lineHeight": "28px", "fontWeight": "700" }]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="text-on-surface pb-24">
+    <header
+        class="fixed top-0 w-full z-50 bg-surface shadow-sm flex items-center justify-between px-container-padding h-16">
+        <button id="menuBtn"
+            class="hover:bg-surface-container-low transition-colors active:scale-95 duration-200 p-2 rounded-full">
+            <span class="material-symbols-outlined text-primary" data-icon="menu">menu</span>
+        </button>
+        <h1 class="font-headline-md-mobile text-headline-md-mobile text-primary">Profile</h1>
+        <div class="w-10"></div>
+    </header>
+
+    <main class="pt-20 px-container-padding fade-in">
+        <section class="flex flex-col items-center mt-6 mb-8 text-center">
+            <div class="relative group">
+                <div
+                    class="w-32 h-32 rounded-full profile-ring p-1 mb-4 shadow-lg transition-transform duration-300 group-hover:scale-105">
+                    <img id="profileImageDisplay" alt="Foto de perfil"
+                        class="w-full h-full object-cover rounded-full border-4 border-white shadow-inner"
+                        src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=256" />
+                </div>
+                <button id="changePhotoBtn"
+                    class="absolute bottom-4 right-1 bg-primary text-white rounded-full p-2 border-2 border-white shadow-md active:scale-90 transition-transform">
+                    <span class="material-symbols-outlined text-[18px]" data-icon="edit">edit</span>
+                </button>
+            </div>
+            <h2 id="displayName" class="font-headline-lg-mobile text-headline-lg-mobile text-on-surface mb-1">Ana García
+            </h2>
+            <p id="displayRole" class="text-secondary font-body-md mb-4">Paciente</p>
+            <button id="editProfileBtn1"
+                class="text-primary font-label-md border border-primary-fixed-dim px-4 py-1.5 rounded-full hover:bg-primary-fixed transition-colors active:scale-95 duration-150">
+                Editar perfil
+            </button>
+        </section>
+
+        <section class="mb-xl">
+            <div class="bg-white rounded-2xl p-lg shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-surface-container">
+                <h3 class="font-headline-md text-headline-md text-on-surface mb-md">Información Personal</h3>
+                <div class="space-y-md">
+                    <div class="flex items-center gap-md">
+                        <div class="w-10 h-10 bg-primary-fixed rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary" data-icon="mail">mail</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-label-md text-secondary">Email</span>
+                            <span id="displayEmail" class="font-body-md text-on-surface">ana.garcia@email.com</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-md">
+                        <div class="w-10 h-10 bg-primary-fixed rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary"
+                                data-icon="phone_iphone">phone_iphone</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-label-md text-secondary">Teléfono</span>
+                            <span id="displayPhone" class="font-body-md text-on-surface">+34 600 000 000</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-md">
+                        <div class="w-10 h-10 bg-primary-fixed rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary" data-icon="cake">cake</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-label-md text-secondary">Edad</span>
+                            <span id="displayAge" class="font-body-md text-on-surface">28 años</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-md">
+                        <div class="w-10 h-10 bg-primary-fixed rounded-xl flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary" data-icon="bloodtype">bloodtype</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="font-label-md text-secondary">Tipo de Sangre</span>
+                            <span id="displayBloodType" class="font-body-md text-on-surface">O+</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-md mb-xl">
+            <button id="goToCitasBtn"
+                class="w-full bg-primary-container text-on-primary-container font-headline-md py-4 rounded-2xl shadow-md hover:brightness-105 active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+                Ver mis citas
+            </button>
+            <button id="editProfileBtn2"
+                class="w-full bg-secondary-container text-on-secondary-container font-headline-md py-4 rounded-2xl hover:bg-secondary-fixed-dim active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Editar información
+            </button>
+            <button id="logoutBtn"
+                class="w-full bg-surface-container text-primary font-headline-md py-4 rounded-2xl shadow-sm hover:bg-surface-variant active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 mt-4">
+                <span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Cerrar sesión
+            </button>
+        </section>
+
+        <section class="grid grid-cols-2 gap-gutter mb-xl">
+            <div
+                class="bg-surface-container-low p-md rounded-2xl border border-surface-container-high flex flex-col items-center">
+                <span id="statTotalCitas" class="text-primary font-headline-lg">0</span>
+                <span class="text-secondary font-label-md uppercase tracking-wider text-center">Citas Totales</span>
+            </div>
+            <div
+                class="bg-surface-container-low p-md rounded-2xl border border-surface-container-high flex flex-col items-center">
+                <span id="statRecetasActivas" class="text-tertiary font-headline-lg">2</span>
+                <span class="text-secondary font-label-md uppercase tracking-wider text-center">Recetas Activas</span>
+            </div>
+        </section>
+    </main>
+
+    <nav
+        class="fixed bottom-0 left-0 right-0 bg-[#fff8f8] border-t border-gray-200 shadow-[0_-4px_12px_rgba(0,0,0,0.03)] flex justify-around items-center py-2 z-50 pb-[calc(8px+env(safe-area-inset-bottom,0px))]">
+        <a href="home.html"
+            class="flex flex-col items-center flex-1 text-center text-xs font-medium text-gray-500 hover:text-[#b90a5a] transition-colors">
+            <span class="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_0,'wght'_400]">home</span>
+            <span class="mt-0.5">Inicio</span>
+        </a>
+        <a href="citas.html"
+            class="flex flex-col items-center flex-1 text-center text-xs font-medium text-gray-500 hover:text-[#b90a5a] transition-colors">
+            <span
+                class="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_0,'wght'_400]">calendar_month</span>
+            <span class="mt-0.5">Citas</span>
+        </a>
+        <a href="chatbot.html"
+            class="flex flex-col items-center flex-1 text-center text-xs font-medium text-gray-500 hover:text-[#b90a5a] transition-colors">
+            <span
+                class="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_0,'wght'_400]">smart_toy</span>
+            <span class="mt-0.5">IA médica</span>
+        </a>
+        <a href="perfil.html"
+            class="flex flex-col items-center flex-1 text-center text-xs font-semibold text-[#b90a5a]">
+            <span class="material-symbols-outlined text-2xl [font-variation-settings:'FILL'_1,'wght'_500]">person</span>
+            <span class="mt-0.5">Perfil</span>
+        </a>
+    </nav>
+
+    <div id="editProfileModal"
+        class="hidden fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center transition-opacity duration-300 opacity-0">
+        <div
+            class="w-full max-w-[420px] bg-white rounded-t-3xl md:rounded-3xl p-6 space-y-4 shadow-2xl transform translate-y-full md:translate-y-0 md:scale-95 transition-transform duration-300">
+            <div class="flex justify-between items-center border-b border-outline-variant/20 pb-3">
+                <h2 class="text-lg font-bold text-on-surface">Editar Información Personal</h2>
+                <button id="closeModalBtn" class="text-secondary hover:text-on-surface">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+
+            <form id="editProfileForm" class="space-y-3">
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-on-surface-variant" for="inputName">Nombre Completo</label>
+                    <input type="text" id="inputName"
+                        class="w-full h-11 px-4 rounded-xl bg-gray-50 border border-outline-variant/50 focus:border-primary focus:ring-0 text-sm"
+                        required />
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-on-surface-variant" for="inputEmail">Correo
+                        Electrónico</label>
+                    <input type="email" id="inputEmail"
+                        class="w-full h-11 px-4 rounded-xl bg-gray-50 border border-outline-variant/50 focus:border-primary focus:ring-0 text-sm"
+                        required />
+                </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold text-on-surface-variant" for="inputPhone">Teléfono</label>
+                    <input type="text" id="inputPhone"
+                        class="w-full h-11 px-4 rounded-xl bg-gray-50 border border-outline-variant/50 focus:border-primary focus:ring-0 text-sm"
+                        required />
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-semibold text-on-surface-variant" for="inputAge">Edad (Años)</label>
+                        <input type="number" id="inputAge"
+                            class="w-full h-11 px-4 rounded-xl bg-gray-50 border border-outline-variant/50 focus:border-primary focus:ring-0 text-sm"
+                            required />
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-semibold text-on-surface-variant" for="inputBloodType">Grupo
+                            Sanguíneo</label>
+                        <select id="inputBloodType"
+                            class="w-full h-11 px-4 rounded-xl bg-gray-50 border border-outline-variant/50 focus:border-primary focus:ring-0 text-sm"
+                            required>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="AB+">AB+</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit"
+                    class="w-full h-12 bg-primary text-white font-semibold rounded-xl shadow-md hover:brightness-105 active:scale-95 transition-all mt-2">
+                    Guardar Cambios
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast"
+        class="hidden fixed bottom-24 left-1/2 transform -translate-x-1/2 z-50 text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 text-xs font-medium bg-neutral-900 animate-toast">
+        <span class="material-symbols-outlined text-tertiary-container text-lg" id="toastIcon">check_circle</span>
+        <span id="toastMessage">Operación exitosa</span>
+    </div>
+
+    <script>
+        // Data Keys Configuration
+        const PROFILE_KEY = 'mediquick_perfil';
+        const CITAS_KEY = 'mediquick_citas';
+
+        // Default Initial Profile State
+        const defaultProfile = {
+            name: "Ana García",
+            role: "Paciente",
+            email: "ana.garcia@email.com",
+            phone: "+34 600 000 000",
+            age: "28",
+            bloodType: "O+"
+        };
+
+        // DOM Cache References
+        const editProfileModal = document.getElementById('editProfileModal');
+        const editProfileForm = document.getElementById('editProfileForm');
+        const toast = document.getElementById('toast');
+
+        // Initializer Execution
+        document.addEventListener('DOMContentLoaded', () => {
+            initProfileData();
+            syncStatsCounter();
+            setupEventListeners();
+        });
+
+        // Initialize localStorage variables safely
+        function initProfileData() {
+            let data = localStorage.getItem(PROFILE_KEY);
+            if (!data) {
+                localStorage.setItem(PROFILE_KEY, JSON.stringify(defaultProfile));
+                data = JSON.stringify(defaultProfile);
+            }
+            renderProfile(JSON.parse(data));
+        }
+
+        // Real DB Sincronization layer
+        function syncStatsCounter() {
+            const citasData = JSON.parse(localStorage.getItem(CITAS_KEY)) || [];
+            document.getElementById('statTotalCitas').innerText = citasData.length;
+        }
+
+        // Render data changes dynamically into UI components
+        function renderProfile(profile) {
+            document.getElementById('displayName').innerText = profile.name;
+            document.getElementById('displayRole').innerText = profile.role;
+            document.getElementById('displayEmail').innerText = profile.email;
+            document.getElementById('displayPhone').innerText = profile.phone;
+            document.getElementById('displayAge').innerText = `${profile.age} años`;
+            document.getElementById('displayBloodType').innerText = profile.bloodType;
+        }
+
+        // Setup Event Receivers and Hub Links
+        function setupEventListeners() {
+            // Action Buttons to Modals
+            document.getElementById('editProfileBtn1').addEventListener('click', openEditorModal);
+            document.getElementById('editProfileBtn2').addEventListener('click', openEditorModal);
+            document.getElementById('closeModalBtn').addEventListener('click', closeEditorModal);
+            editProfileForm.addEventListener('submit', handleFormUpdate);
+
+            // Redirections and Module Router Links
+            document.getElementById('goToCitasBtn').addEventListener('click', () => { window.location.href = 'citas.html'; });
+
+            // Extra Microinteractions
+            document.getElementById('menuBtn').addEventListener('click', () => showToast('Menú lateral en desarrollo', 'info'));
+            document.getElementById('changePhotoBtn').addEventListener('click', () => showToast('Carga de imagen simulada con éxito', 'success'));
+
+            // Manejador del Cierre de Sesión apuntando a index.html
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', () => {
+                    // Limpieza preventiva de variables generadas por el loginForm
+                    localStorage.removeItem('session_user');
+                    localStorage.removeItem('session_role');
+
+                    // Redirección directa al archivo index.html
+                    window.location.href = 'index.html';
+                });
+            }
+
+            // Modal State Controller
+            function openEditorModal() {
+                const data = JSON.parse(localStorage.getItem(PROFILE_KEY));
+
+                // Populate Input values accurately
+                document.getElementById('inputName').value = data.name;
+                document.getElementById('inputEmail').value = data.email;
+                document.getElementById('inputPhone').value = data.phone;
+                document.getElementById('inputAge').value = data.age;
+                document.getElementById('inputBloodType').value = data.bloodType;
+
+                editProfileModal.classList.remove('hidden');
+                setTimeout(() => {
+                    editProfileModal.classList.remove('opacity-0');
+                    editProfileModal.querySelector('.transform').classList.remove('translate-y-full', 'md:scale-95');
+                }, 10);
+            }
+
+            function closeEditorModal() {
+                editProfileModal.querySelector('.transform').classList.add('translate-y-full', 'md:scale-95');
+                editProfileModal.classList.add('opacity-0');
+                setTimeout(() => {
+                    editProfileModal.classList.add('hidden');
+                }, 300);
+            }
+
+            // Safe Profile Update Controller
+            function handleFormUpdate(e) {
+                e.preventDefault();
+
+                const updatedData = {
+                    name: document.getElementById('inputName').value.trim(),
+                    role: "Paciente", // Kept constant
+                    email: document.getElementById('inputEmail').value.trim(),
+                    phone: document.getElementById('inputPhone').value.trim(),
+                    age: document.getElementById('inputAge').value,
+                    bloodType: document.getElementById('inputBloodType').value
+                };
+
+                // Mandatory Validation Layers
+                if (!updatedData.name || !updatedData.email || !updatedData.phone || !updatedData.age) {
+                    showToast('Todos los campos son estrictamente requeridos.', 'error');
+                    return;
+                }
+
+                // Persistence write pipeline
+                localStorage.setItem(PROFILE_KEY, JSON.stringify(updatedData));
+                renderProfile(updatedData);
+                closeEditorModal();
+                showToast('Información de perfil actualizada con éxito', 'success');
+            }
+
+            // Global Feedback Toast Controller
+            function showToast(message, type = 'success') {
+                const toastMessage = document.getElementById('toastMessage');
+                const toastIcon = document.getElementById('toastIcon');
+
+                toastMessage.innerText = message;
+                if (type === 'error') {
+                    toastIcon.innerText = 'error';
+                    toastIcon.className = 'material-symbols-outlined text-error text-lg';
+                } else if (type === 'info') {
+                    toastIcon.innerText = 'info';
+                    toastIcon.className = 'material-symbols-outlined text-blue-400 text-lg';
+                } else {
+                    toastIcon.innerText = 'check_circle';
+                    toastIcon.className = 'material-symbols-outlined text-tertiary-container text-lg';
+                }
+
+                toast.classList.remove('hidden');
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 3000);
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Análisis de Salud - Mediquick</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .bg-medical-gradient {
+            background: radial-gradient(circle at top right, #ffd9e4 0%, #f8f9ff 100%);
+        }
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #debec8;
+            border-radius: 10px;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary-fixed-variant": "#454747",
+                      "tertiary-fixed-dim": "#c6c6c7",
+                      "on-surface-variant": "#574048",
+                      "on-tertiary-fixed": "#1a1c1c",
+                      "primary-container": "#d23284",
+                      "inverse-on-surface": "#eaf1ff",
+                      "on-error-container": "#93000a",
+                      "outline-variant": "#debec8",
+                      "on-secondary-container": "#686066",
+                      "on-primary": "#ffffff",
+                      "surface-bright": "#f8f9ff",
+                      "on-primary-fixed-variant": "#8c0053",
+                      "surface-container-high": "#dce9ff",
+                      "surface-container": "#e5eeff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-low": "#eff4ff",
+                      "primary-fixed-dim": "#ffb0cd",
+                      "on-surface": "#0b1c30",
+                      "surface": "#f8f9ff",
+                      "surface-variant": "#d3e4fe",
+                      "on-primary-container": "#fffbff",
+                      "inverse-primary": "#ffb0cd",
+                      "tertiary-container": "#737575",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed": "#3e0022",
+                      "primary-fixed": "#ffd9e4",
+                      "error-container": "#ffdad6",
+                      "outline": "#8b7079",
+                      "on-tertiary": "#ffffff",
+                      "on-background": "#0b1c30",
+                      "secondary": "#635c61",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed": "#eae0e6",
+                      "inverse-surface": "#213145",
+                      "on-tertiary-container": "#fcfcfc",
+                      "tertiary": "#5a5c5c",
+                      "background": "#f8f9ff",
+                      "secondary-container": "#e7dde3",
+                      "on-secondary-fixed-variant": "#4b454a",
+                      "surface-container-highest": "#d3e4fe",
+                      "tertiary-fixed": "#e2e2e2",
+                      "secondary-fixed-dim": "#cec4ca",
+                      "surface-tint": "#b4136d",
+                      "primary": "#b10e6b",
+                      "surface-dim": "#cbdbf5",
+                      "error": "#ba1a1a",
+                      "on-secondary-fixed": "#1f1a1e"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "sidebar-width": "260px",
+                      "unit": "8px",
+                      "gutter": "24px",
+                      "container-padding-dt": "32px",
+                      "container-padding-mb": "16px"
+              },
+              "fontFamily": {
+                      "headline-lg": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-lg-mobile": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-lg": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body {
+          min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+<body class="bg-medical-gradient min-h-screen font-body-md text-on-surface">
+<!-- Navigation Drawer (Desktop) -->
+<aside class="h-screen w-sidebar-width fixed left-0 top-0 hidden md:flex flex-col py-6 gap-unit bg-white/60 backdrop-blur-xl border-r border-white/40 shadow-md z-40">
+<div class="px-6 mb-8">
+<h1 class="font-headline-md text-headline-md text-primary">Mediquick</h1>
+</div>
+<div class="flex items-center px-6 mb-10 gap-3">
+<img alt="Admin" class="w-12 h-12 rounded-full object-cover border-2 border-primary-fixed" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA8za8_18fwywht46TpFZpVqjZRTllQh9u9fm_yGiubaY1lRiT0UogI0MZRBmwIPH3pCPPH8yx_2AK2UQ3ZX3itLkcs6VuzWsduDh1gZ7-L8HRlxVijWlYBsQjso3GPRlM4OBfAUiQdNMwIrcvU7DGivZ2-0uDk3wL0QGo0ej0837uKjG67DfCNe-EJBlR69b33psv7QiIExu1RfnEugy2rJC8_QdA-rM8M8AosJ_03HV6buuVDeUssipHcvSrLeqNN-zM9z6F-iu7t"/>
+<div>
+<p class="font-semibold text-on-surface">Dr. Smith</p>
+<p class="text-xs text-on-surface-variant">Director Médico</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-secondary-container/30 mx-2 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Inicio</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 bg-primary-container text-on-primary-container rounded-full mx-2 font-semibold" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span>Gráficos</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-secondary-container/30 mx-2 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span>Citas</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-secondary-container/30 mx-2 rounded-full transition-all" href="#">
+<span class="material-symbols-outlined">account_circle</span>
+<span>Perfil</span>
+</a>
+</nav>
+</aside>
+<!-- Top App Bar -->
+<header class="w-full sticky top-0 z-50 bg-surface/60 backdrop-blur-md border-b border-white/40 shadow-sm flex items-center justify-between px-container-padding-mb md:px-container-padding-dt md:ml-sidebar-width md:w-[calc(100%-260px)] h-20">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-2xl">clinical_notes</span>
+<h2 class="font-headline-lg text-headline-lg font-bold text-primary">Análisis de Salud</h2>
+</div>
+<div class="hidden sm:flex flex-col items-end">
+<span class="text-on-surface font-semibold" id="current-date"></span>
+<span class="text-primary text-sm font-medium" id="current-time"></span>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="md:ml-sidebar-width p-container-padding-mb md:p-container-padding-dt pb-24 md:pb-8">
+<!-- Header & Filter -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+<div>
+<h3 class="text-xl font-bold text-on-surface" id="view-title">Resumen Semanal</h3>
+<p class="text-sm text-on-surface-variant">Estado actual del rendimiento médico</p>
+</div>
+<select class="bg-white/60 border-none rounded-xl text-sm px-4 py-2 shadow-sm focus:ring-2 focus:ring-primary/20 transition-all cursor-pointer" id="time-filter">
+<option value="weekly">Últimos 7 Días</option>
+<option value="monthly">Últimos 30 Días</option>
+<option value="yearly">Este Año</option>
+</select>
+</div>
+<!-- KPI Mini Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
+<div class="glass-panel p-5 rounded-2xl flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-green-600">trending_up</span>
+</div>
+<div>
+<p class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Crecimiento</p>
+<p class="text-xl font-bold text-on-surface" id="kpi-growth">+12.5% <span class="text-xs font-normal text-green-600 ml-1">vs sep</span></p>
+</div>
+</div>
+<div class="glass-panel p-5 rounded-2xl flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-primary-fixed/30 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">speed</span>
+</div>
+<div>
+<p class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Eficiencia</p>
+<p class="text-xl font-bold text-on-surface" id="kpi-efficiency">94.2% <span class="text-xs font-normal text-primary ml-1">Promedio</span></p>
+</div>
+</div>
+<div class="glass-panel p-5 rounded-2xl flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-blue-600">sentiment_very_satisfied</span>
+</div>
+<div>
+<p class="text-xs font-semibold text-on-surface-variant uppercase tracking-wider">Satisfacción</p>
+<p class="text-xl font-bold text-on-surface" id="kpi-satisfaction">4.8/5 <span class="text-xs font-normal text-blue-600 ml-1">Rating</span></p>
+</div>
+</div>
+</div>
+<!-- Main Detailed Line Chart -->
+<div class="glass-panel p-6 sm:p-8 rounded-2xl shadow-sm mb-8">
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 mb-8">
+<h4 class="font-headline-md text-on-surface">Atenciones vs Citas Agendadas</h4>
+<div class="flex gap-4 text-xs font-medium">
+<span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-primary"></span> Atenciones</span>
+<span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-secondary"></span> Citas</span>
+</div>
+</div>
+<div class="h-[300px] sm:h-[400px]">
+<canvas id="mainDetailedChart"></canvas>
+</div>
+</div>
+<!-- Secondary Charts Row -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+<!-- Speciality Distribution -->
+<div class="glass-panel p-6 rounded-2xl shadow-sm">
+<h4 class="font-headline-md text-on-surface mb-6">Distribución por Especialidad</h4>
+<div class="flex flex-col items-center justify-center">
+<div class="h-64 w-64">
+<canvas id="specialtyChart"></canvas>
+</div>
+<div class="grid grid-cols-2 gap-x-8 gap-y-2 mt-6 w-full px-4" id="specialty-legend">
+<div class="flex items-center justify-between">
+<span class="text-xs text-on-surface-variant flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#ec4899]"></span> Card</span>
+<span class="text-xs font-bold" id="legend-card">35%</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs text-on-surface-variant flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#635c61]"></span> Ped</span>
+<span class="text-xs font-bold" id="legend-ped">25%</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs text-on-surface-variant flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#debec8]"></span> Gen</span>
+<span class="text-xs font-bold" id="legend-gen">20%</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-xs text-on-surface-variant flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#ffb0cd]"></span> Neu</span>
+<span class="text-xs font-bold" id="legend-neu">20%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Activity Peaks -->
+<div class="glass-panel p-6 rounded-2xl shadow-sm">
+<h4 class="font-headline-md text-on-surface mb-6">Picos de Actividad (Horario)</h4>
+<div class="h-72">
+<canvas id="activityPeaksChart"></canvas>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile) -->
+<nav class="fixed bottom-0 w-full md:hidden rounded-t-xl z-50 bg-white/80 backdrop-blur-lg border-t border-white/40 shadow-lg flex justify-around items-center h-16 px-4">
+<div class="flex flex-col items-center text-on-surface-variant p-2 cursor-pointer transition-all">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-[10px]">Inicio</span>
+</div>
+<div class="flex flex-col items-center text-primary bg-primary-fixed/30 rounded-xl p-2 cursor-pointer transition-all">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-label-sm text-[10px]">Gráficos</span>
+</div>
+<div class="flex flex-col items-center text-on-surface-variant p-2 cursor-pointer transition-all">
+<span class="material-symbols-outlined">event_note</span>
+<span class="font-label-sm text-[10px]">Citas</span>
+</div>
+<div class="flex flex-col items-center text-on-surface-variant p-2 cursor-pointer transition-all">
+<span class="material-symbols-outlined">account_circle</span>
+<span class="font-label-sm text-[10px]">Perfil</span>
+</div>
+</nav>
+<!-- Toast Notifications -->
+<div class="fixed bottom-20 right-4 md:bottom-8 md:right-8 z-[60] flex flex-col gap-2" id="toast-container"></div>
+<script>
+        // 1. Data Store
+        const dataSet = {
+            weekly: {
+                title: "Resumen Semanal",
+                kpis: {
+                    growth: "+12.5% <span class='text-xs font-normal text-green-600 ml-1'>vs sep</span>",
+                    efficiency: "94.2% <span class='text-xs font-normal text-primary ml-1'>Promedio</span>",
+                    satisfaction: "4.8/5 <span class='text-xs font-normal text-blue-600 ml-1'>Rating</span>"
+                },
+                mainChart: {
+                    labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'],
+                    atenciones: [42, 58, 48, 85, 52, 64, 78],
+                    citas: [50, 65, 55, 90, 60, 68, 82]
+                },
+                specialty: [35, 25, 20, 20],
+                activity: [15, 32, 28, 12, 45, 38, 20]
+            },
+            monthly: {
+                title: "Resumen Mensual",
+                kpis: {
+                    growth: "+8.2% <span class='text-xs font-normal text-green-600 ml-1'>vs mes ant.</span>",
+                    efficiency: "91.5% <span class='text-xs font-normal text-primary ml-1'>Promedio</span>",
+                    satisfaction: "4.7/5 <span class='text-xs font-normal text-blue-600 ml-1'>Rating</span>"
+                },
+                mainChart: {
+                    labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4'],
+                    atenciones: [220, 245, 210, 280],
+                    citas: [240, 260, 230, 290]
+                },
+                specialty: [40, 20, 25, 15],
+                activity: [12, 28, 35, 18, 50, 42, 25]
+            },
+            yearly: {
+                title: "Resumen Anual",
+                kpis: {
+                    growth: "+15.4% <span class='text-xs font-normal text-green-600 ml-1'>vs 2023</span>",
+                    efficiency: "89.8% <span class='text-xs font-normal text-primary ml-1'>Promedio</span>",
+                    satisfaction: "4.9/5 <span class='text-xs font-normal text-blue-600 ml-1'>Rating</span>"
+                },
+                mainChart: {
+                    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                    atenciones: [850, 920, 880, 1050, 1100, 950, 890, 1200, 1150, 1300, 1250, 1400],
+                    citas: [900, 950, 920, 1100, 1150, 1000, 950, 1250, 1200, 1350, 1300, 1450]
+                },
+                specialty: [30, 30, 20, 20],
+                activity: [20, 45, 40, 15, 60, 55, 30]
+            }
+        };
+
+        let mainChart, specialtyChart, activityChart;
+
+        // 2. Utils
+        const updateDateTime = () => {
+            const now = new Date();
+            const optionsDate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const optionsTime = { hour: '2-digit', minute: '2-digit', hour12: true };
+            
+            const dateEl = document.getElementById('current-date');
+            const timeEl = document.getElementById('current-time');
+            if (dateEl) {
+                let dateStr = now.toLocaleDateString('es-ES', optionsDate);
+                dateEl.textContent = dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+            }
+            if (timeEl) timeEl.textContent = now.toLocaleTimeString('es-ES', optionsTime);
+        };
+
+        const showToast = (message, type = 'success') => {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const toast = document.createElement('div');
+            const icon = type === 'success' ? 'check_circle' : 'error';
+            const borderColor = type === 'success' ? 'border-primary' : 'border-error';
+            const iconColor = type === 'success' ? 'text-primary' : 'text-error';
+
+            toast.className = `glass-panel px-6 py-4 rounded-xl shadow-lg border-l-4 ${borderColor} transform translate-x-12 opacity-0 transition-all duration-300 pointer-events-auto`;
+            toast.innerHTML = `
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined ${iconColor}">${icon}</span>
+                    <p class="text-sm font-medium text-on-surface">${message}</p>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-x-12', 'opacity-0'), 10);
+            setTimeout(() => {
+                toast.classList.add('translate-x-12', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        };
+
+        // 3. Charts Logic
+        const initCharts = () => {
+            Chart.defaults.font.family = 'Inter';
+            Chart.defaults.color = '#574048';
+
+            const ctxMain = document.getElementById('mainDetailedChart').getContext('2d');
+            const gradAtenciones = ctxMain.createLinearGradient(0, 0, 0, 400);
+            gradAtenciones.addColorStop(0, 'rgba(236, 72, 153, 0.25)');
+            gradAtenciones.addColorStop(1, 'rgba(236, 72, 153, 0)');
+
+            mainChart = new Chart(ctxMain, {
+                type: 'line',
+                data: {
+                    labels: dataSet.weekly.mainChart.labels,
+                    datasets: [
+                        {
+                            label: 'Atenciones',
+                            data: dataSet.weekly.mainChart.atenciones,
+                            borderColor: '#ec4899',
+                            backgroundColor: gradAtenciones,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 4,
+                            borderWidth: 4
+                        },
+                        {
+                            label: 'Citas',
+                            data: dataSet.weekly.mainChart.citas,
+                            borderColor: '#635c61',
+                            borderDash: [6, 6],
+                            fill: false,
+                            tension: 0.4,
+                            pointRadius: 0,
+                            borderWidth: 2
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            grid: { color: 'rgba(0,0,0,0.03)' },
+                            ticks: { font: { size: 10 } }
+                        },
+                        x: { 
+                            grid: { display: false },
+                            ticks: { font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+
+            const ctxSpecialty = document.getElementById('specialtyChart').getContext('2d');
+            specialtyChart = new Chart(ctxSpecialty, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Cardiología', 'Pediatría', 'General', 'Neurología'],
+                    datasets: [{
+                        data: dataSet.weekly.specialty,
+                        backgroundColor: ['#ec4899', '#635c61', '#debec8', '#ffb0cd'],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '75%',
+                    plugins: { legend: { display: false } }
+                }
+            });
+
+            const ctxPeaks = document.getElementById('activityPeaksChart').getContext('2d');
+            activityChart = new Chart(ctxPeaks, {
+                type: 'bar',
+                data: {
+                    labels: ['08:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00'],
+                    datasets: [{
+                        label: 'Pacientes',
+                        data: dataSet.weekly.activity,
+                        backgroundColor: '#ec4899',
+                        borderRadius: 8,
+                        barThickness: 16
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { 
+                            display: false,
+                            beginAtZero: true 
+                        },
+                        x: { 
+                            grid: { display: false },
+                            ticks: { font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+        };
+
+        const updateView = (period) => {
+            const data = dataSet[period];
+            if (!data) return;
+
+            // Update Text content
+            document.getElementById('view-title').textContent = data.title;
+            document.getElementById('kpi-growth').innerHTML = data.kpis.growth;
+            document.getElementById('kpi-efficiency').innerHTML = data.kpis.efficiency;
+            document.getElementById('kpi-satisfaction').innerHTML = data.kpis.satisfaction;
+
+            // Update Main Chart
+            mainChart.data.labels = data.mainChart.labels;
+            mainChart.data.datasets[0].data = data.mainChart.atenciones;
+            mainChart.data.datasets[1].data = data.mainChart.citas;
+            mainChart.update('none');
+
+            // Update Specialty
+            specialtyChart.data.datasets[0].data = data.specialty;
+            specialtyChart.update('none');
+            
+            // Update Legend labels (simulated math)
+            document.getElementById('legend-card').textContent = data.specialty[0] + '%';
+            document.getElementById('legend-ped').textContent = data.specialty[1] + '%';
+            document.getElementById('legend-gen').textContent = data.specialty[2] + '%';
+            document.getElementById('legend-neu').textContent = data.specialty[3] + '%';
+
+            // Update Activity
+            activityChart.data.datasets[0].data = data.activity;
+            activityChart.update('none');
+
+            showToast(`Datos actualizados: ${document.querySelector('#time-filter option:checked').text}`);
+        };
+
+        // 4. Lifecycle
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDateTime();
+            setInterval(updateDateTime, 60000);
+            initCharts();
+
+            // Filter Interaction
+            const filter = document.getElementById('time-filter');
+            if (filter) {
+                filter.addEventListener('change', (e) => {
+                    updateView(e.target.value);
+                });
+            }
+
+            // Mobile Nav Interaction
+            const navItems = document.querySelectorAll('nav div.cursor-pointer');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(i => {
+                        i.classList.remove('text-primary', 'bg-primary-fixed/30', 'rounded-xl');
+                        i.classList.add('text-on-surface-variant');
+                    });
+                    this.classList.add('text-primary', 'bg-primary-fixed/30', 'rounded-xl');
+                    this.classList.remove('text-on-surface-variant');
+                });
+            });
+        });
+
+        window.onerror = function(msg) {
+            console.error("Mediquick Analytics Error: ", msg);
+            return true;
+        };
+    </script>
+</body></html>
